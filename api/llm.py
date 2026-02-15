@@ -1,37 +1,19 @@
 import json
 import os
-import time
-import importlib
+import re
 from typing import Any, Dict, List, Optional, cast
-from google import genai  
-
+from google import genai
 from dotenv import load_dotenv
 
 load_dotenv()
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
-client = genai.Client(api_key=GEMINI_API_KEY)
+DEFAULT_MODEL = "gemini-3-flash-preview"
+DEBUG_LOGS = os.getenv("SATQ_DEBUG", "1").lower() not in {"0", "false", "no"}
+DEBUG_VERBOSE = os.getenv("SATQ_DEBUG_VERBOSE", "0").lower() in {"1", "true", "yes"}
 
-model_name = "gemini-2.5-pro"
-
-# Rate limiting and caching configuration
-MIN_SECONDS_BETWEEN_CALLS = float(os.getenv("GEMINI_MIN_SECONDS", "1.0"))  # Flash Lite is faster and cheaper
-REQUEST_TIMEOUT = float(os.getenv("GEMINI_TIMEOUT_SECONDS", "30.0"))  # Timeout to prevent hanging
-MAX_RETRIES = int(os.getenv("GEMINI_MAX_RETRIES", "2"))  # Retry failed requests
-
-_last_call_time = 0.0
-_client_instance: Optional[Any] = None
-_node_cache: Dict[str, List[Dict[str, Any]]] = {}  # Cache extracted nodes by skill
-
-def _pace_calls() -> None:
-    """Rate limiter to respect API quotas and prevent timeouts"""
-    global _last_call_time
-    now = time.time()
-    delta = now - _last_call_time
-    if delta < MIN_SECONDS_BETWEEN_CALLS:
-        time.sleep(MIN_SECONDS_BETWEEN_CALLS - delta)
-    _last_call_time = time.time()
+client = genai.Client(api_key=GEMINI_API_KEY) if GEMINI_API_KEY else None
 
 def _clean_json_text(text: str) -> str:
     cleaned = text.strip()
@@ -42,7 +24,6 @@ def _clean_json_text(text: str) -> str:
     if cleaned.endswith("```"):
         cleaned = cleaned[:-3]
     return cleaned.strip()
-
 
 def _extract_text_from_response(resp: Any) -> str:
     if resp is None:
@@ -91,37 +72,55 @@ def _extract_text_from_response(resp: Any) -> str:
     return str(resp)
 
 def _invoke_model(prompt: str) -> str:
-    
-    for attempt in range(MAX_RETRIES):
-        try:
-            _pace_calls()  # Rate limit before each attempt
-            
-            # Pattern 1: genai.GenerativeModel(...).generate_content(prompt) - Primary method
-            if hasattr(genai, "GenerativeModel"):
-                ModelCls = getattr(genai, "GenerativeModel")
-                resp = client.models.generate_content(
-                    model=model_name, contents=prompt
-                )
-                text = _extract_text_from_response(resp)
-                if text:
-                    return text
-        except Exception as e:
-            if attempt == MAX_RETRIES - 1:
-                raise RuntimeError(f"API request failed after {MAX_RETRIES} attempts: {e}") from e
-            time.sleep(1)  # Brief wait before retry
-            continue
+    if client is None:
+        raise RuntimeError("GEMINI_API_KEY is not configured.")
 
-    raise RuntimeError("All API attempts exhausted")
+    is_generation_prompt = (
+        "Generate one SAT Reading and Writing" in prompt
+        or "Generate one SAT-style question" in prompt
+    )
+
+    if DEBUG_LOGS and (DEBUG_VERBOSE or is_generation_prompt):
+        preview = prompt[:700].replace("\n", "\\n")
+        print(f"[DEBUG][llm] invoking Gemini model={DEFAULT_MODEL} prompt_len={len(prompt)}")
+        print(f"[DEBUG][llm] prompt_preview={preview}")
+
+    response = client.models.generate_content(model=DEFAULT_MODEL, contents=prompt)
+    text = _extract_text_from_response(response)
+    if DEBUG_LOGS and (DEBUG_VERBOSE or is_generation_prompt):
+        resp_preview = (text or "")[:700].replace("\n", "\\n")
+        print(f"[DEBUG][llm] response_len={len(text or '')}")
+        print(f"[DEBUG][llm] response_preview={resp_preview}")
+    if not text:
+        raise RuntimeError("Gemini returned an empty response.")
+    return text
+
+
+def _parse_json_with_recovery(text: str) -> Any:
+    cleaned = _clean_json_text(text)
+    try:
+        return json.loads(cleaned)
+    except Exception:
+        pass
+
+    array_match = re.search(r"\[.*\]", cleaned, flags=re.DOTALL)
+    if array_match:
+        try:
+            return json.loads(array_match.group(0))
+        except Exception:
+            pass
+
+    obj_match = re.search(r"\{.*\}", cleaned, flags=re.DOTALL)
+    if obj_match:
+        return json.loads(obj_match.group(0))
+
+    raise ValueError("No valid JSON object/array found in model output")
 
 def extract_graph_nodes(
     questions_batch: List[Dict[str, Any]],
     skill_name: str,
-    model_name: Optional[str] = None,
 ) -> List[Dict[str, Any]]:
-    
-    cache_key = f"{skill_name}:{len(questions_batch)}"
-    if cache_key in _node_cache:
-        return _node_cache[cache_key]
+
     
     # Build ultra-compact representation - minimal tokens
     minified_qs = []
@@ -131,18 +130,22 @@ def extract_graph_nodes(
             "ans": q.get("correct_answer", "")[:20],  # Truncate answer too
         })
     
-    prompt = f"""Extract 3 patterns per question from {len(questions_batch)} {skill_name} Qs.
-Patterns: topic, logic_skeleton, answer_skeleton.
-{json.dumps(minified_qs, separators=(',', ':'))}
-JSON only: [{{"topic":"...","logic_skeleton":"...","answer_skeleton":"..."}}]"""
+    prompt = f"""You are extracting SAT item patterns for skill {skill_name}.
+For each question, return one object with keys: topic, logic_skeleton, answer_skeleton.
+Keep values short and reusable.
+Questions: {json.dumps(minified_qs, separators=(',', ':'))}
+Return JSON array only."""
 
     raw_text = _invoke_model(prompt)
-    text = _clean_json_text(raw_text)
     try:
-        result = json.loads(text)
-        _node_cache[cache_key] = result  # Cache the results
+        result = _parse_json_with_recovery(raw_text)
+        
         return result
     except Exception as e:
+        if DEBUG_LOGS:
+            print(f"[DEBUG][llm] extract_graph_nodes parse_error={e}")
+            print(f"[DEBUG][llm] raw_output={raw_text}")
+        text = _clean_json_text(raw_text)
         raise RuntimeError(f"Failed to parse JSON from LLM output: {e}\nOutput was:\n{text}") from e
 
 def generate_question(
@@ -151,21 +154,82 @@ def generate_question(
     answer_skeleton: str,
     example_question: Dict[str, Any],
     user_context: Optional[str] = None,
-    model_name: Optional[str] = None,
 ) -> Dict[str, Any]:
 
-    # Extract minimal style hints
-    ex_len = max(100, len(example_question.get("prompt", "")))
-    ex_ans_len = 20  # Typical SAT answer length
-    
-    # Compact prompt - minimal verbosity
-    prompt = f"""Gen SAT q: {topic}|{logic_skeleton}|{answer_skeleton}
-Passage:{ex_len}c,answer:{ex_ans_len}c,3distractors
-JSON:{{"prompt":"...","question_text":"...","correct_answer_text":"...","distractors":[...],"explanation":"..."}}"""
+    ex_len = max(120, len(example_question.get("prompt", "")))
+
+    prompt = f"""Generate one SAT Reading and Writing multiple-choice item.
+        Constraints:
+        - Topic: {topic}
+        - Reasoning skeleton: {logic_skeleton}
+        - Answer pattern: {answer_skeleton}
+        - Similar prompt length: about {ex_len} characters
+        - Exactly 4 answer choices total (1 correct + 3 distractors)
+        - Must be an original scenario.
+        - Do not copy, closely paraphrase, or reuse named entities from the sample.
+
+        Example style reference:
+        {json.dumps(example_question, ensure_ascii=False)}
+
+        Optional user context:
+        {user_context or ""}
+
+        Return JSON only:
+        {{
+            "prompt": "...",
+            "question_text": "...",
+            "correct_answer_text": "...",
+            "distractors": ["...", "...", "..."],
+            "explanation": "..."
+        }}"""
 
     raw_text = _invoke_model(prompt)
-    text = _clean_json_text(raw_text)
     try:
-        return json.loads(text)
+        return cast(Dict[str, Any], _parse_json_with_recovery(raw_text))
     except Exception as e:
+        if DEBUG_LOGS:
+            print(f"[DEBUG][llm] generate_question parse_error={e}")
+            print(f"[DEBUG][llm] raw_output={raw_text}")
+        text = _clean_json_text(raw_text)
+        raise RuntimeError(f"Failed to parse JSON from LLM output: {e}\nOutput was:\n{text}") from e
+
+
+def generate_question_from_features(
+    question_topic: str,
+    question_skeleton: str,
+    answer_type: str,
+    sample_question: Dict[str, Any],
+    style_profile: Dict[str, Any],
+    user_context: Optional[str] = None,
+) -> Dict[str, Any]:
+    prompt = f"""Generate one SAT-style question.
+Inputs:
+- topic: {question_topic}
+- skeleton: {question_skeleton}
+- answer_type: {answer_type}
+- style_profile: {json.dumps(style_profile, ensure_ascii=False)}
+- sample_question: {json.dumps(sample_question, ensure_ascii=False)}
+- user_context: {user_context or ''}
+
+Hard requirements:
+- Generate a fresh scenario each time.
+- Do not copy, near-copy, or lightly paraphrase the sample question text.
+- Do not reuse key named entities from the sample.
+
+If answer_type is multiple_choice:
+Return JSON with keys prompt, question_text, correct_answer_text, distractors (exactly 3), explanation.
+
+If answer_type is free_response:
+Return JSON with keys prompt, question_text, expected_answer, explanation.
+
+Return JSON only."""
+
+    raw_text = _invoke_model(prompt)
+    try:
+        return cast(Dict[str, Any], _parse_json_with_recovery(raw_text))
+    except Exception as e:
+        if DEBUG_LOGS:
+            print(f"[DEBUG][llm] generate_question_from_features parse_error={e}")
+            print(f"[DEBUG][llm] raw_output={raw_text}")
+        text = _clean_json_text(raw_text)
         raise RuntimeError(f"Failed to parse JSON from LLM output: {e}\nOutput was:\n{text}") from e

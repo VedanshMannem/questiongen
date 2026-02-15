@@ -60,8 +60,8 @@ def main() -> None:
     parser.add_argument("--input-folder", default=uploads_dir(), help="Folder to scan when --input is omitted.")
     parser.add_argument("--extract-nodes", action="store_true", help="Extract graph nodes.")
     parser.add_argument("--generate-count", type=int, default=0, help="Number of questions to generate.")
-    parser.add_argument("--user-id", help="Supermemory user id (container_tag).")
-    parser.add_argument("--memory-query", help="Query used to retrieve user context from memory.")
+    parser.add_argument("--user-id", help="Reserved for future user-memory feature (currently disabled).")
+    parser.add_argument("--memory-query", help="Reserved for future user-memory feature (currently disabled).")
     parser.add_argument("--dry-run", action="store_true", help="Validate data without making API calls.")
 
     args = parser.parse_args()

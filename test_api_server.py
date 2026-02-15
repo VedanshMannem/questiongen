@@ -31,25 +31,36 @@ def test_api_server():
         print(f"✗ FAILED: {e}")
         return False
     
-    print("\n[TEST 2] Testing /process endpoint with file upload (mocked LLM)...")
+    print("\n[TEST 2] Testing /extract-features endpoint with file upload (mocked LLM)...")
     try:
-        # Mock the LLM calls to avoid hitting Gemini API
         mock_nodes = json.dumps([
             {"topic": "Test Topic", "logic_skeleton": "Test Logic", "answer_skeleton": "Test Answer"}
         ])
+        mock_generated = json.dumps({
+            "prompt": "Sample generated prompt.",
+            "question_text": "Which choice best supports the claim?",
+            "correct_answer_text": "The strongest evidence directly supports the claim.",
+            "distractors": [
+                "It repeats the claim without new support.",
+                "It introduces an unrelated topic.",
+                "It weakens the argument in the passage."
+            ],
+            "explanation": "The correct option is the only one that directly supports the claim."
+        })
         
         with mock.patch('api.llm._invoke_model') as mock_invoke:
-            mock_invoke.return_value = mock_nodes
+            def _side_effect(prompt: str):
+                if "extract" in prompt.lower():
+                    return mock_nodes
+                return mock_generated
+
+            mock_invoke.side_effect = _side_effect
             
-            # Upload a test file
             with open('test_data/comprehensive_dataset.json', 'rb') as f:
                 response = client.post(
-                    "/process",
+                    "/extract-features",
                     files={"file": ("test.json", f, "application/json")},
-                    data={
-                        "extract_nodes": "true",
-                        "generate_count": "0",
-                    }
+                    data={"use_llm": "true"}
                 )
             
             print(f"Response status: {response.status_code}")
@@ -57,12 +68,43 @@ def test_api_server():
                 print(f"Response body: {response.text[:200]}")
             
             assert response.status_code == 200, f"Expected 200, got {response.status_code}"
-            result = response.json()
-            assert "run_id" in result
-            assert result["input_count"] == 60
-            print("✓ File upload and pipeline run successful")
-            print(f"  - Run ID: {result['run_id']}")
-            print(f"  - Questions processed: {result['input_count']}")
+            extract_result = response.json()
+            assert "run_id" in extract_result
+            assert extract_result["phase"] == "feature_extraction"
+            assert extract_result["input_count"] == 60
+            print("✓ Feature extraction successful")
+            print(f"  - Feature Run ID: {extract_result['run_id']}")
+
+            print("\n[TEST 3] Testing /generate-questions endpoint with extracted run...")
+            gen_resp = client.post(
+                "/generate-questions",
+                json={
+                    "feature_run_id": extract_result["run_id"],
+                    "question_topic": "Information and Ideas / Inferences",
+                    "question_skeleton": "logical_completion",
+                    "answer_type": "multiple_choice",
+                    "count": 1,
+                }
+            )
+            assert gen_resp.status_code == 200, f"Expected 200, got {gen_resp.status_code}: {gen_resp.text[:200]}"
+            gen_result = gen_resp.json()
+            assert gen_result["phase"] == "question_generation"
+            assert gen_result["generated_count"] == 1
+            print("✓ Question generation successful")
+            print(f"  - Generation Run ID: {gen_result['run_id']}")
+
+            print("\n[TEST 4] Verifying /process compatibility endpoint...")
+            with open('test_data/comprehensive_dataset.json', 'rb') as f:
+                compat_resp = client.post(
+                    "/process",
+                    files={"file": ("test.json", f, "application/json")},
+                    data={
+                        "extract_nodes": "true",
+                        "generate_count": "0",
+                    }
+                )
+            assert compat_resp.status_code == 200
+            print("✓ /process compatibility preserved")
     except AssertionError as e:
         print(f"✗ FAILED: {e}")
         return False
@@ -79,6 +121,8 @@ def test_api_server():
     print("  uvicorn api.main:app --reload")
     print("\nEndpoints:")
     print("  - GET /health")
+    print("  - POST /extract-features")
+    print("  - POST /generate-questions")
     print("  - POST /process")
     
     return True

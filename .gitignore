@@ -19,3 +19,5 @@ uploads/
 .DS_Store
 Thumbs.db
 .vscode/
+
+data/
