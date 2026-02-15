@@ -1,0 +1,47 @@
+[
+  {
+    "id": "q1",
+    "prompt": "Algebra",
+    "question_text": "If 3x + 5 = 20, what is x?",
+    "answer_choices": ["3", "5", "7", "10"],
+    "correct_answer": "5",
+    "explanation": "3x = 15 => x = 5",
+    "metadata": {"domain": "Math", "skill": "Linear equations", "difficulty": "Easy"}
+  },
+  {
+    "id": "q2",
+    "prompt": "Number properties",
+    "question_text": "Which number is a prime: 15, 17, 21?",
+    "answer_choices": ["15", "17", "21"],
+    "correct_answer": "17",
+    "explanation": "17 is prime",
+    "metadata": {"domain": "Math", "skill": "Primes", "difficulty": "Easy"}
+  },
+  {
+    "id": "q3",
+    "prompt": "Reading",
+    "question_text": "Read the passage: \"The cat sat on the mat.\" What did the cat sit on?",
+    "answer_choices": ["the mat", "the hat", "the rug"],
+    "correct_answer": "the mat",
+    "explanation": "The passage states the cat sat on the mat.",
+    "metadata": {"domain": "Reading", "skill": "Literal comprehension", "difficulty": "Easy"}
+  },
+  {
+    "id": "q4",
+    "prompt": "Geometry",
+    "question_text": "If a rectangle has width 4 and length 7, what is its area?",
+    "answer_choices": ["11", "28", "21", "14"],
+    "correct_answer": "28",
+    "explanation": "Area = width * length = 4 * 7 = 28",
+    "metadata": {"domain": "Math", "skill": "Area calculation", "difficulty": "Easy"}
+  },
+  {
+    "id": "q5",
+    "prompt": "Vocabulary",
+    "question_text": "Which word is a synonym of 'quick'? fast, slow, heavy",
+    "answer_choices": ["fast", "slow", "heavy"],
+    "correct_answer": "fast",
+    "explanation": "'Fast' is a synonym of 'quick'.",
+    "metadata": {"domain": "English", "skill": "Vocabulary", "difficulty": "Easy"}
+  }
+]

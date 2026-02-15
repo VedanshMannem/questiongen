@@ -1,0 +1,747 @@
+[
+  {
+    "id": "q_1",
+    "prompt": "Recent studies indicate that forests can significantly impact local temperature patterns. Researchers investigating forested streams found that the dense canopy provides shade, which reduces water temperature. In turn, cooler water temperatures support diverse aquatic species. The findings suggest that preserving forested areas is essential for maintaining biodiversity in freshwater ecosystems.",
+    "question_text": "The passage suggests that forested streams support biodiversity primarily because they",
+    "answer_choices": [
+      "provide shade that regulates water temperature",
+      "contain more nutrients than open streams",
+      "are located in specific geographic regions",
+      "attract birds and other wildlife species"
+    ],
+    "correct_answer": "A",
+    "explanation": "The passage directly states that the canopy provides shade, which reduces water temperature, and this supports diverse aquatic species. Option B is not mentioned, C is too vague, and D is not the primary mechanism described.",
+    "metadata": {"domain": "Reading", "skill": "Direct evidence", "difficulty": "Medium"}
+  },
+  {
+    "id": "q_2",
+    "prompt": "Microplastics are tiny plastic particles found increasingly in ocean water. Scientists recently discovered high concentrations of microplastics in coral reef ecosystems. The research shows a correlation between microplastic presence and reduced coral growth rates. Additionally, laboratory studies demonstrate that microplastics can be ingested by coral larvae, potentially affecting their development.",
+    "question_text": "Which choice best describes the function of the laboratory studies mentioned in the passage?",
+    "answer_choices": [
+      "They contradict the field observations about microplastics in ocean water",
+      "They provide a mechanism for how microplastics might harm coral development",
+      "They explain why microplastics are concentrated in certain ocean regions",
+      "They demonstrate that microplastics are less harmful than other pollutants"
+    ],
+    "correct_answer": "B",
+    "explanation": "The lab studies show that microplastics can be ingested by larvae and affect development, providing a causal mechanism. The other options are either not supported or contradict the passage.",
+    "metadata": {"domain": "Reading", "skill": "Function of evidence", "difficulty": "Medium"}
+  },
+  {
+    "id": "q_3",
+    "prompt": "Climate change is altering precipitation patterns globally. Wild rice, a staple crop in northern regions, requires specific water conditions to thrive. As climate change shifts rainfall patterns, wild rice growing regions experience either drought or flooding. Farmers must adapt their cultivation techniques to these unpredictable conditions.",
+    "question_text": "What can be inferred about the relationship between wild rice cultivation and climate stability?",
+    "answer_choices": [
+      "Wild rice has adapted to all climate conditions over time",
+      "Climate stability is important for successful wild rice production",
+      "Farmers are developing entirely new rice varieties for climate change",
+      "Wild rice is becoming less important in global food production"
+    ],
+    "correct_answer": "B",
+    "explanation": "The passage indicates that wild rice requires specific water conditions and that changing patterns force farmer adaptation, implying climate stability is important. The other options lack textual support.",
+    "metadata": {"domain": "Reading", "skill": "Inference", "difficulty": "Medium"}
+  },
+  {
+    "id": "q_4",
+    "prompt": "Black women's clubs during the Progressive Era (1890s-1920s) played a crucial role in social reform. These organizations addressed education, healthcare, and voting rights. Notable figures like Mary Church Terrell led efforts to combat segregation through organized community action. Their work laid the groundwork for the Civil Rights Movement decades later.",
+    "question_text": "The passage indicates that Black women's clubs were significant because they",
+    "answer_choices": [
+      "were the first organizations to address voting rights",
+      "exclusively focused on education and healthcare",
+      "engaged in organized community action for social reform",
+      "directly influenced all subsequent civil rights legislation"
+    ],
+    "correct_answer": "C",
+    "explanation": "The passage defines their significance as organizations that addressed multiple issues through organized community action. A is too absolute, B is partial, and D overstates their direct influence.",
+    "metadata": {"domain": "Reading", "skill": "Direct evidence", "difficulty": "Easy"}
+  },
+  {
+    "id": "q_5",
+    "prompt": "Ansel Adams' landscape photography revolutionized how nature was documented and appreciated. However, Adams also sought commercial purposes for his work. Some of his most iconic photographs were commissioned for corporate campaigns and government initiatives. This dual purpose—artistic excellence and commercial viability—defined his career.",
+    "question_text": "Based on the passage, Adams' approach to photography could be described as",
+    "answer_choices": [
+      "purely artistic with no commercial consideration",
+      "balancing artistic merit with commercial opportunity",
+      "focused primarily on corporate advertising",
+      "isolated from practical commercial concerns"
+    ],
+    "correct_answer": "B",
+    "explanation": "The passage explicitly mentions his 'dual purpose' of artistic excellence and commercial viability, indicating a balance. The other options ignore this balance or mischaracterize his work.",
+    "metadata": {"domain": "Reading", "skill": "Inference", "difficulty": "Medium"}
+  },
+  {
+    "id": "q_6",
+    "prompt": "If 2x + 4 = 18, what is the value of x?",
+    "question_text": "Solve for x: 2x + 4 = 18",
+    "answer_choices": ["5", "7", "9", "11"],
+    "correct_answer": "B",
+    "explanation": "2x + 4 = 18; 2x = 14; x = 7",
+    "metadata": {"domain": "Math", "skill": "Linear equations", "difficulty": "Easy"}
+  },
+  {
+    "id": "q_7",
+    "prompt": "A rectangle has a perimeter of 40 cm. If the length is 12 cm, what is the width?",
+    "question_text": "Find the width of the rectangle",
+    "answer_choices": ["4 cm", "8 cm", "12 cm", "16 cm"],
+    "correct_answer": "B",
+    "explanation": "Perimeter = 2(length + width); 40 = 2(12 + w); 20 = 12 + w; w = 8",
+    "metadata": {"domain": "Math", "skill": "Geometry", "difficulty": "Easy"}
+  },
+  {
+    "id": "q_8",
+    "prompt": "What is the prime factorization of 36?",
+    "question_text": "Express 36 as a product of prime numbers",
+    "answer_choices": ["2 × 3", "2² × 3²", "2 × 18", "4 × 9"],
+    "correct_answer": "B",
+    "explanation": "36 = 2 × 18 = 2 × 2 × 9 = 2 × 2 × 3 × 3 = 2² × 3². Only B shows the complete prime factorization.",
+    "metadata": {"domain": "Math", "skill": "Number theory", "difficulty": "Medium"}
+  },
+  {
+    "id": "q_9",
+    "prompt": "A store is having a 25% off sale. An item originally costs $80. What is the sale price?",
+    "question_text": "Calculate the discounted price",
+    "answer_choices": ["$20", "$40", "$60", "$75"],
+    "correct_answer": "C",
+    "explanation": "25% of $80 = 0.25 × $80 = $20. Sale price = $80 - $20 = $60",
+    "metadata": {"domain": "Math", "skill": "Percentages", "difficulty": "Easy"}
+  },
+  {
+    "id": "q_10",
+    "prompt": "If a triangle has angles of 45°, 45°, and 90°, what type of triangle is it?",
+    "question_text": "Classify the triangle",
+    "answer_choices": ["Equilateral", "Isosceles right triangle", "Scalene", "Obtuse"],
+    "correct_answer": "B",
+    "explanation": "Two equal angles (45° and 45°) make it isosceles. A 90° angle makes it a right triangle. Therefore: isosceles right triangle.",
+    "metadata": {"domain": "Math", "skill": "Geometry", "difficulty": "Medium"}
+  },
+  {
+    "id": "q_11",
+    "prompt": "Photosynthesis is the process by which plants convert light energy into chemical energy stored in glucose. This process requires sunlight, water, and carbon dioxide. The chloroplast is the cellular organelle where photosynthesis occurs. Understanding photosynthesis is crucial for comprehending how energy flows through ecosystems.",
+    "question_text": "According to the passage, what role do chloroplasts play in photosynthesis?",
+    "answer_choices": [
+      "They absorb water and carbon dioxide from soil",
+      "They are the site where photosynthesis occurs",
+      "They convert glucose into energy for the plant",
+      "They regulate the amount of sunlight the plant receives"
+    ],
+    "correct_answer": "B",
+    "explanation": "The passage states 'The chloroplast is the cellular organelle where photosynthesis occurs.' This directly answers what role chloroplasts play. Options A, C, and D describe different processes not attributed to chloroplasts in the passage.",
+    "metadata": {"domain": "Science", "skill": "Direct evidence", "difficulty": "Easy"}
+  },
+  {
+    "id": "q_12",
+    "prompt": "Ocean acidification occurs when excessive carbon dioxide in the atmosphere dissolves in seawater, forming carbonic acid. This lowers the pH of ocean water. Pteropods, tiny marine organisms with calcium carbonate shells, are particularly vulnerable to acidification. As ocean pH decreases, pteropods struggle to build and maintain their shells, affecting the marine food web.",
+    "question_text": "The passage suggests that ocean acidification most directly threatens pteropods by",
+    "answer_choices": [
+      "increasing the temperature of ocean water",
+      "reducing the amount of food available to pteropods",
+      "making it difficult for pteropods to form their shells",
+      "causing pteropods to migrate to different ocean regions"
+    ],
+    "correct_answer": "C",
+    "explanation": "The passage explicitly states that lower pH makes pteropods 'struggle to build and maintain their shells.' This is the direct threat. The other options are not mentioned or contradicted by the passage.",
+    "metadata": {"domain": "Science", "skill": "Inference", "difficulty": "Medium"}
+  },
+  {
+    "id": "q_13",
+    "prompt": "The carbon cycle describes how carbon moves between the atmosphere, living organisms, and Earth's geological systems. Plants absorb carbon dioxide during photosynthesis, animals consume plants, and decomposition releases carbon back to the soil and atmosphere. Human activities like burning fossil fuels have increased atmospheric carbon dioxide by 50% since the Industrial Revolution.",
+    "question_text": "What can be inferred about the impact of fossil fuel combustion on the carbon cycle?",
+    "answer_choices": [
+      "It increases the amount of carbon dioxide in the atmosphere",
+      "It decreases the amount of carbon in living organisms",
+      "It eliminates the decomposition stage of the carbon cycle",
+      "It has no significant effect on natural carbon cycling"
+    ],
+    "correct_answer": "A",
+    "explanation": "The passage states that fossil fuel combustion has 'increased atmospheric carbon dioxide by 50% since the Industrial Revolution,' directly supporting option A. Options B and C are not supported, and D contradicts the passage.",
+    "metadata": {"domain": "Science", "skill": "Inference", "difficulty": "Medium"}
+  },
+  {
+    "id": "q_14",
+    "prompt": "DNA (deoxyribonucleic acid) is the molecule that carries genetic information in living organisms. It consists of four nucleotide bases: adenine, thymine, guanine, and cytosine. These bases pair in specific ways: adenine with thymine and guanine with cytosine. This base-pairing rule explains how DNA accurately replicates itself before cell division.",
+    "question_text": "According to the passage, the base-pairing rule in DNA serves which function?",
+    "answer_choices": [
+      "It determines which organisms are plants versus animals",
+      "It enables accurate replication of DNA before cell division",
+      "It protects DNA from damage caused by radiation",
+      "It speeds up the process of protein synthesis"
+    ],
+    "correct_answer": "B",
+    "explanation": "The passage explicitly states that the base-pairing rule 'explains how DNA accurately replicates itself before cell division.' This is stated as its function. The other options are not mentioned.",
+    "metadata": {"domain": "Science", "skill": "Direct evidence", "difficulty": "Easy"}
+  },
+  {
+    "id": "q_15",
+    "prompt": "The Industrial Revolution, beginning in the late 18th century in Britain, transformed production methods and society. Mechanical innovations like the steam engine revolutionized manufacturing and transportation. Factories replaced cottage industries, drawing rural populations to cities. This resulted in rapid urbanization and significant social changes.",
+    "question_text": "The passage indicates that the Industrial Revolution's primary consequence was",
+    "answer_choices": [
+      "the invention of mechanical technology",
+      "the end of all agricultural production",
+      "rapid urbanization and social transformation",
+      "the creation of new types of clothing"
+    ],
+    "correct_answer": "C",
+    "explanation": "The passage describes how technological changes led to urbanization and social changes, presenting this as a primary consequence. Options A and D are too narrow or inaccurate, and B is contradicted by reality.",
+    "metadata": {"domain": "History", "skill": "Inference", "difficulty": "Medium"}
+  },
+  {
+    "id": "q_16",
+    "prompt": "The fall of the Berlin Wall in 1989 marked the beginning of the end for Soviet-era communism in Eastern Europe. Citizens from East and West Berlin celebrated together, symbolizing the reunification of a divided nation. Within a year, Germany was officially reunified. This event is widely considered a turning point in Cold War history.",
+    "question_text": "Why does the passage characterize the fall of the Berlin Wall as a turning point?",
+    "answer_choices": [
+      "Because it ended all conflicts in Europe",
+      "Because it immediately resolved all economic problems",
+      "Because it represented the beginning of the end for communist control in the region",
+      "Because it resulted from a peaceful protest against all walls"
+    ],
+    "correct_answer": "C",
+    "explanation": "The passage explicitly states it 'marked the beginning of the end for Soviet-era communism in Eastern Europe,' which is why it's a turning point. The other options either misrepresent the passage or overstate its claims.",
+    "metadata": {"domain": "History", "skill": "Inference", "difficulty": "Medium"}
+  },
+  {
+    "id": "q_17",
+    "prompt": "Which word is most nearly opposite in meaning to 'aberrant'?",
+    "question_text": "What is the antonym of 'aberrant'?",
+    "answer_choices": ["abnormal", "typical", "deviant", "unusual"],
+    "correct_answer": "B",
+    "explanation": "'Aberrant' means deviating from what is normal or expected. 'Typical' (meaning normal and expected) is most nearly opposite. The other words are synonyms for 'aberrant' or related to abnormality.",
+    "metadata": {"domain": "English", "skill": "Vocabulary", "difficulty": "Medium"}
+  },
+  {
+    "id": "q_18",
+    "prompt": "The author's tone throughout the passage is best described as",
+    "question_text": "Identify the author's tone in this critical review of the museum's recent renovation.",
+    "answer_choices": ["sarcastic and dismissive", "enthusiastic and appreciative", "neutral and objective", "cynical and bitter"],
+    "correct_answer": "B",
+    "explanation": "The review praises the architect's attention to detail and the museum's enhanced visitor experience, indicating an enthusiastic and appreciative tone.",
+    "metadata": {"domain": "English", "skill": "Tone and attitude", "difficulty": "Medium"}
+  },
+  {
+    "id": "q_19",
+    "prompt": "The phrase 'burning the midnight oil' most likely means",
+    "question_text": "What does this idiom suggest about the speaker's effort?",
+    "answer_choices": [
+      "The person is wasting time and resources",
+      "The person is working very late into the night",
+      "The person has set something on fire",
+      "The person is using outdated technology"
+    ],
+    "correct_answer": "B",
+    "explanation": "This common idiom means working hard, often late at night. It originated from when people used oil lamps to light their work at night. Options A and D are misinterpretations, and C is literal.",
+    "metadata": {"domain": "English", "skill": "Idioms", "difficulty": "Easy"}
+  },
+  {
+    "id": "q_20",
+    "prompt": "Which sentence contains a grammatical error?",
+    "question_text": "Identify the sentence with incorrect grammar",
+    "answer_choices": [
+      "She were going to the store tomorrow morning.",
+      "He has already finished his homework.",
+      "They are planning a trip to Europe.",
+      "The committee has reached its decision."
+    ],
+    "correct_answer": "A",
+    "explanation": "'She were' is grammatically incorrect; it should be 'She was.' The other sentences are grammatically correct.",
+    "metadata": {"domain": "English", "skill": "Grammar", "difficulty": "Easy"}
+  },
+  {
+    "id": "q_21",
+    "prompt": "Ralph Ellison's novel 'Invisible Man' profoundly influenced African American literature. Toni Morrison, in particular, was shaped by Ellison's use of sermon language to convey spiritual and cultural meaning. Both authors employed this technique to connect their narratives to the African American religious tradition. Their work demonstrates how literary inheritance and innovation intersect.",
+    "question_text": "According to the passage, what literary technique connects Ellison and Morrison's work?",
+    "answer_choices": [
+      "Use of complex plot structures",
+      "Incorporation of sermon language",
+      "Setting their novels in urban environments",
+      "Focus on economic inequality"
+    ],
+    "correct_answer": "B",
+    "explanation": "The passage explicitly states that both authors used sermon language to convey meaning. This is the primary connection described. The other options are not supported by the passage.",
+    "metadata": {"domain": "Reading", "skill": "Direct evidence", "difficulty": "Medium"}
+  },
+  {
+    "id": "q_22",
+    "prompt": "Patrick Kelly revolutionized fashion by incorporating buttons—traditionally overlooked accessories—as central design elements. His garments featured intricate button arrangements that created visual depth and cultural commentary. This unconventional approach challenged traditional fashion norms and established Kelly as an innovative designer.",
+    "question_text": "Kelly's use of buttons in his designs primarily served to",
+    "answer_choices": [
+      "reduce the cost of manufacturing garments",
+      "create visual depth and cultural commentary",
+      "make garments easier to put on and take off",
+      "align with established fashion industry standards"
+    ],
+    "correct_answer": "B",
+    "explanation": "The passage states that button arrangements 'created visual depth and cultural commentary,' indicating this was the primary purpose. The other options are not supported.",
+    "metadata": {"domain": "Reading", "skill": "Inference", "difficulty": "Medium"}
+  },
+  {
+    "id": "q_23",
+    "prompt": "Elizabeth Catlett's sculptures revolutionized how African American women were depicted in art. Her works emphasized dignity, strength, and cultural pride. Catlett's commitment to social justice was evident in her art, which often addressed themes of racial equality and gender empowerment.",
+    "question_text": "The passage suggests that Catlett's sculptures were primarily characterized by",
+    "answer_choices": [
+      "abstract and experimental design",
+      "celebration of African American women's dignity and strength",
+      "commercial appeal to wealthy collectors",
+      "imitation of classical European art traditions"
+    ],
+    "correct_answer": "B",
+    "explanation": "The passage emphasizes that her works 'emphasized dignity, strength, and cultural pride' and addressed 'racial equality and gender empowerment.' Option B captures this primary characteristic. The other options either contradict or are unsupported by the passage.",
+    "metadata": {"domain": "Reading", "skill": "Inference", "difficulty": "Medium"}
+  },
+  {
+    "id": "q_24",
+    "prompt": "The earliest motion pictures, such as 'Arrival of the Train' (1896), fascinated audiences by simply capturing movement. The novelty of seeing moving images on screen was revolutionary. Early filmmakers prioritized technical achievement over narrative complexity. This pioneering period established cinema as a viable art form and entertainment medium.",
+    "question_text": "According to the passage, early motion pictures relied primarily on",
+    "answer_choices": [
+      "complex storytelling and character development",
+      "the novelty of captured movement",
+      "advanced special effects technology",
+      "dialogue and sound design"
+    ],
+    "correct_answer": "B",
+    "explanation": "The passage explicitly states that early films 'fascinated audiences' because of the 'novelty of seeing moving images' and that filmmakers 'prioritized technical achievement over narrative complexity.' Option B directly reflects this.",
+    "metadata": {"domain": "History", "skill": "Direct evidence", "difficulty": "Easy"}
+  },
+  {
+    "id": "q_25",
+    "prompt": "Ocean mixing refers to the process by which different water layers blend due to tides, currents, and wind. This mixing is vital for nutrient distribution throughout the ocean. Nutrients brought to the surface by mixing support the growth of phytoplankton, which form the base of the marine food web. Regions with higher mixing rates tend to have greater biological productivity.",
+    "question_text": "The passage implies that ocean mixing is essential for marine productivity because it",
+    "answer_choices": [
+      "increases ocean temperature uniformly",
+      "distributes nutrients throughout ocean layers",
+      "reduces the salinity of surface water",
+      "prevents the formation of icebergs"
+    ],
+    "correct_answer": "B",
+    "explanation": "The passage states that mixing is 'vital for nutrient distribution' and explains how this supports phytoplankton growth. Option B directly reflects this mechanism. The other options are unsupported.",
+    "metadata": {"domain": "Science", "skill": "Inference", "difficulty": "Medium"}
+  },
+  {
+    "id": "q_26",
+    "prompt": "A bee colony consists of three types of bees: the queen, workers, and drones. The queen's primary role is reproduction, ensuring population growth. Worker bees, all female, perform essential tasks like foraging, nursing larvae, and hive maintenance. Drones, the males, exist primarily to mate with the queen. This division of labor enables colony efficiency.",
+    "question_text": "According to the passage, the division of labor in a bee colony functions to",
+    "answer_choices": [
+      "ensure equal distribution of reproductive opportunities",
+      "prevent conflict between different bee types",
+      "enable colony efficiency through specialized roles",
+      "increase the number of drones in the colony"
+    ],
+    "correct_answer": "C",
+    "explanation": "The passage explicitly states 'This division of labor enables colony efficiency.' This directly answers the question. The other options either misrepresent the passage or are unsupported.",
+    "metadata": {"domain": "Science", "skill": "Direct evidence", "difficulty": "Easy"}
+  },
+  {
+    "id": "q_27",
+    "prompt": "What is 15% of 240?",
+    "question_text": "Calculate 15% of 240",
+    "answer_choices": ["24", "36", "48", "60"],
+    "correct_answer": "B",
+    "explanation": "15% of 240 = 0.15 × 240 = 36",
+    "metadata": {"domain": "Math", "skill": "Percentages", "difficulty": "Easy"}
+  },
+  {
+    "id": "q_28",
+    "prompt": "If a car travels 150 miles in 3 hours, what is its average speed?",
+    "question_text": "Calculate the average speed",
+    "answer_choices": ["30 mph", "45 mph", "50 mph", "75 mph"],
+    "correct_answer": "C",
+    "explanation": "Average speed = Total distance / Total time = 150 miles / 3 hours = 50 mph",
+    "metadata": {"domain": "Math", "skill": "Rate and distance", "difficulty": "Easy"}
+  },
+  {
+    "id": "q_29",
+    "prompt": "What is the value of x² when x = 5?",
+    "question_text": "Evaluate x² for x = 5",
+    "answer_choices": ["10", "25", "35", "50"],
+    "correct_answer": "B",
+    "explanation": "5² = 5 × 5 = 25",
+    "metadata": {"domain": "Math", "skill": "Exponents", "difficulty": "Easy"}
+  },
+  {
+    "id": "q_30",
+    "prompt": "Solve: If 3x - 7 = 20, what is x?",
+    "question_text": "Find the value of x",
+    "answer_choices": ["4.33", "9", "15", "27"],
+    "correct_answer": "B",
+    "explanation": "3x - 7 = 20; 3x = 27; x = 9",
+    "metadata": {"domain": "Math", "skill": "Linear equations", "difficulty": "Medium"}
+  },
+  {
+    "id": "q_31",
+    "prompt": "The term 'ameliorate' most closely means:",
+    "question_text": "What is the definition of 'ameliorate'?",
+    "answer_choices": ["worsen", "improve", "confuse", "divide"],
+    "correct_answer": "B",
+    "explanation": "'Ameliorate' means to make something better or improve it. Option B is the correct definition.",
+    "metadata": {"domain": "English", "skill": "Vocabulary", "difficulty": "Easy"}
+  },
+  {
+    "id": "q_32",
+    "prompt": "In literary analysis, what is the primary purpose of identifying an author's rhetorical devices?",
+    "question_text": "Why do we analyze rhetorical devices in literature?",
+    "answer_choices": [
+      "To make the text more interesting",
+      "To understand how the author persuades or affects the audience",
+      "To criticize the author's writing style",
+      "To simplify complex literary concepts"
+    ],
+    "correct_answer": "B",
+    "explanation": "Rhetorical devices are techniques writers use to achieve specific effects on readers. Understanding them helps us see how authors persuade, influence, or impact their audience.",
+    "metadata": {"domain": "English", "skill": "Literary analysis", "difficulty": "Medium"}
+  },
+  {
+    "id": "q_33",
+    "prompt": "The Pando colony is a clonal colony of quaking aspen trees connected by a single root system. Located in Utah, Pando is geographically the largest single organism on Earth. Recent climate changes and environmental stressors have threatened this unique ecosystem. Scientists are working to study and protect Pando's health for future generations.",
+    "question_text": "Based on the passage, Pando's significance lies primarily in being",
+    "answer_choices": [
+      "the oldest forest in North America",
+      "the geographically largest single organism on Earth",
+      "the first clonal colony ever discovered",
+      "the tallest collection of trees in the world"
+    ],
+    "correct_answer": "B",
+    "explanation": "The passage explicitly states that 'Pando is geographically the largest single organism on Earth.' This is presented as its primary significance. The other options are not supported.",
+    "metadata": {"domain": "Reading", "skill": "Direct evidence", "difficulty": "Easy"}
+  },
+  {
+    "id": "q_34",
+    "prompt": "Rewilding farmland involves converting agricultural areas back to natural habitats. Recent studies show that rewilded areas can support diverse wildlife while also sequestering carbon in soil and vegetation. However, rewilding efforts must balance ecological benefits with the economic concerns of local farming communities.",
+    "question_text": "According to the passage, rewilding farmland presents a challenge because it must",
+    "answer_choices": [
+      "eliminate all agricultural production",
+      "only benefit large corporations",
+      "balance ecological benefits with economic concerns of farmers",
+      "increase herbicide use significantly"
+    ],
+    "correct_answer": "C",
+    "explanation": "The passage explicitly states that rewilding 'must balance ecological benefits with the economic concerns of local farming communities.' This directly answers the question.",
+    "metadata": {"domain": "Reading", "skill": "Direct evidence", "difficulty": "Medium"}
+  },
+  {
+    "id": "q_35",
+    "prompt": "Etel Adnan's 'leporello' (an accordion-folded booklet titled 'December from My Window') captures daily observations and sketches from her studio window. The fragmented nature of the work mirrors the fleeting quality of perception and memory. Through this experimental format, Adnan challenges conventional narrative structures in artistic documentation.",
+    "question_text": "The passage suggests that the format of Adnan's work serves to",
+    "answer_choices": [
+      "make it easier for readers to understand",
+      "mirror the fragmented nature of perception and memory",
+      "replicate traditional art book formats",
+      "reduce the time required to view the work"
+    ],
+    "correct_answer": "B",
+    "explanation": "The passage explicitly states that 'The fragmented nature of the work mirrors the fleeting quality of perception and memory.' This directly connects the format to its artistic purpose.",
+    "metadata": {"domain": "Reading", "skill": "Inference", "difficulty": "Medium"}
+  },
+  {
+    "id": "q_36",
+    "prompt": "Wu Tsang's art installation 'Anthem' explores themes of identity, community, and social justice. The installation combines video, sound, and physical space to create an immersive experience. Viewers are invited to participate actively rather than observe passively, creating a dialogue between artwork and audience.",
+    "question_text": "Based on the passage, Tsang's installation differs from traditional art displays primarily because it",
+    "answer_choices": [
+      "costs less to produce",
+      "requires viewers to participate actively rather than observe passively",
+      "only addresses identity themes",
+      "uses only video and sound media"
+    ],
+    "correct_answer": "B",
+    "explanation": "The passage states that 'Viewers are invited to participate actively rather than observe passively, creating a dialogue between artwork and audience.' This is the primary difference from traditional displays.",
+    "metadata": {"domain": "Reading", "skill": "Inference", "difficulty": "Medium"}
+  },
+  {
+    "id": "q_37",
+    "prompt": "Early Black women filmmakers of the 1910s-1920s faced significant barriers including limited access to funding and studio facilities. Despite these obstacles, pioneering filmmakers like Alice Guy Blaché created innovative works that explored Black identity and culture. Many of their films were lost due to poor preservation practices of the era.",
+    "question_text": "The passage implies that the loss of early Black women filmmakers' work was due to",
+    "answer_choices": [
+      "intentional destruction by rival filmmakers",
+      "deliberate censorship by government agencies",
+      "poor preservation practices of the time",
+      "lack of artistic merit in the films themselves"
+    ],
+    "correct_answer": "C",
+    "explanation": "The passage states 'Many of their films were lost due to poor preservation practices of the era.' This directly answers the question. The other options are either contradicted or unsupported.",
+    "metadata": {"domain": "History", "skill": "Direct evidence", "difficulty": "Medium"}
+  },
+  {
+    "id": "q_38",
+    "prompt": "The Philadelphia and Lancaster Turnpike, completed in 1795, was the first toll road in America. It revolutionized transportation by providing a reliable, well-maintained route connecting two major cities. The success of this road inspired the construction of similar toll roads throughout the eastern United States.",
+    "question_text": "The passage suggests that the Philadelphia and Lancaster Turnpike was significant because it",
+    "answer_choices": [
+      "was the longest road ever built",
+      "was the first toll road in America and inspired similar projects",
+      "eliminated the need for ferry services",
+      "was built entirely by enslaved workers"
+    ],
+    "correct_answer": "B",
+    "explanation": "The passage identifies the turnpike as 'the first toll road in America' and states that 'its success inspired the construction of similar toll roads.' This combination establishes its significance.",
+    "metadata": {"domain": "History", "skill": "Inference", "difficulty": "Medium"}
+  },
+  {
+    "id": "q_39",
+    "prompt": "The term 'authenticate' most nearly means:",
+    "question_text": "Which word is closest in meaning to 'authenticate'?",
+    "answer_choices": ["verify", "complicate", "originate", "doubt"],
+    "correct_answer": "A",
+    "explanation": "'Authenticate' means to verify or confirm the validity or genuineness of something. 'Verify' is the closest match.",
+    "metadata": {"domain": "English", "skill": "Vocabulary", "difficulty": "Easy"}
+  },
+  {
+    "id": "q_40",
+    "prompt": "Which of the following sentences uses parallel structure correctly?",
+    "question_text": "Identify the sentence with proper parallel structure",
+    "answer_choices": [
+      "She likes to read, write, and dancing.",
+      "She likes to read, to write, and to dance.",
+      "She likes reading, writing, and to dance.",
+      "She likes read, write, and dance."
+    ],
+    "correct_answer": "B",
+    "explanation": "Option B maintains parallel structure by using 'to read, to write, and to dance'—all infinitive verbs. The other options mix different verb forms.",
+    "metadata": {"domain": "English", "skill": "Grammar", "difficulty": "Medium"}
+  },
+  {
+    "id": "q_41",
+    "prompt": "Navajo weaver Lillie Taylor employs traditional techniques to dye wool using natural materials like plants and minerals. This connection to ancestral practices preserves cultural knowledge while producing vibrant, long-lasting colors. Taylor's work demonstrates how traditional craftsmanship maintains cultural identity in contemporary society.",
+    "question_text": "According to the passage, Taylor's use of natural dyes primarily serves to",
+    "answer_choices": [
+      "reduce production costs",
+      "preserve cultural knowledge and maintain cultural identity",
+      "create colors brighter than synthetic dyes",
+      "speed up the weaving process"
+    ],
+    "correct_answer": "B",
+    "explanation": "The passage states that natural dyeing 'preserves cultural knowledge' and that 'Taylor's work demonstrates how traditional craftsmanship maintains cultural identity.' This is the primary purpose described.",
+    "metadata": {"domain": "Reading", "skill": "Inference", "difficulty": "Medium"}
+  },
+  {
+    "id": "q_42",
+    "prompt": "A company has 120 employees. If 30% of them work in sales, how many sales employees are there?",
+    "question_text": "Calculate the number of sales employees",
+    "answer_choices": ["12", "24", "36", "40"],
+    "correct_answer": "C",
+    "explanation": "30% of 120 = 0.30 × 120 = 36",
+    "metadata": {"domain": "Math", "skill": "Percentages", "difficulty": "Easy"}
+  },
+  {
+    "id": "q_43",
+    "prompt": "If the sum of two consecutive integers is 47, what are the integers?",
+    "question_text": "Find the consecutive integers",
+    "answer_choices": ["22 and 23", "23 and 24", "24 and 25", "25 and 26"],
+    "correct_answer": "B",
+    "explanation": "Let x be the first integer. Then x + (x+1) = 47; 2x + 1 = 47; 2x = 46; x = 23. The integers are 23 and 24.",
+    "metadata": {"domain": "Math", "skill": "Algebra", "difficulty": "Medium"}
+  },
+  {
+    "id": "q_44",
+    "prompt": "A box has dimensions of 10 cm × 8 cm × 5 cm. What is its volume?",
+    "question_text": "Calculate the volume of the box",
+    "answer_choices": ["23 cm³", "80 cm³", "230 cm³", "400 cm³"],
+    "correct_answer": "D",
+    "explanation": "Volume = length × width × height = 10 × 8 × 5 = 400 cm³",
+    "metadata": {"domain": "Math", "skill": "Geometry", "difficulty": "Easy"}
+  },
+  {
+    "id": "q_45",
+    "prompt": "What is the value of 2³ × 3²?",
+    "question_text": "Calculate 2³ × 3²",
+    "answer_choices": ["12", "18", "36", "72"],
+    "correct_answer": "D",
+    "explanation": "2³ = 8 and 3² = 9, so 8 × 9 = 72",
+    "metadata": {"domain": "Math", "skill": "Exponents", "difficulty": "Medium"}
+  },
+  {
+    "id": "q_46",
+    "prompt": "Shoreline hardening refers to the construction of barriers like seawalls and bulkheads to prevent land erosion. While these structures protect human development, research shows they negatively impact waterbird populations. Hardened shorelines lack natural vegetation that provides food and nesting habitat. This creates an unintended ecological consequence of coastal protection efforts.",
+    "question_text": "According to the passage, shoreline hardening negatively affects waterbirds primarily because it",
+    "answer_choices": [
+      "increases water salinity levels",
+      "removes natural vegetation that provides habitat and food",
+      "attracts predatory species to the area",
+      "reduces fishing opportunities for coastal communities"
+    ],
+    "correct_answer": "B",
+    "explanation": "The passage explicitly states that 'Hardened shorelines lack natural vegetation that provides food and nesting habitat.' This directly explains the negative impact on waterbirds.",
+    "metadata": {"domain": "Reading", "skill": "Direct evidence", "difficulty": "Medium"}
+  },
+  {
+    "id": "q_47",
+    "prompt": "Freshwater stingray venom toxicity is a subject of growing scientific interest. Recent studies indicate that the venom contains compounds that could have medical applications. Researchers are investigating whether these compounds might be used in pain management or treat certain neurological conditions.",
+    "question_text": "Based on the passage, why are researchers studying freshwater stingray venom?",
+    "answer_choices": [
+      "To develop stronger poisons",
+      "To prove that stingrays are dangerous",
+      "Because the venom may have medical applications",
+      "To eliminate stingray populations"
+    ],
+    "correct_answer": "C",
+    "explanation": "The passage states that researchers 'are investigating whether these compounds might be used in pain management or treat certain neurological conditions,' indicating they seek medical applications.",
+    "metadata": {"domain": "Science", "skill": "Inference", "difficulty": "Easy"}
+  },
+  {
+    "id": "q_48",
+    "prompt": "The Vinland Map, allegedly showing Norse settlements in North America around 1000 CE, has been the subject of intense scholarly debate. Some experts argue it is an authentic historical document, while others claim it is a twentieth-century forgery. Scientific analysis has not definitively resolved the question of its authenticity.",
+    "question_text": "The passage indicates that the authenticity of the Vinland Map",
+    "answer_choices": [
+      "has been definitively proven",
+      "is universally accepted by historians",
+      "remains disputed among scholars",
+      "is no longer of scholarly interest"
+    ],
+    "correct_answer": "C",
+    "explanation": "The passage states 'some experts argue it is authentic, while others claim it is a forgery' and that 'Scientific analysis has not definitively resolved the question.' This indicates ongoing dispute.",
+    "metadata": {"domain": "History", "skill": "Inference", "difficulty": "Medium"}
+  },
+  {
+    "id": "q_49",
+    "prompt": "The Rio Grande Valley experiences distinct seasonal patterns that shape its ecology. Winter brings cooler temperatures and scattered rainfall, while summer months are hot and dry. Native plants have adapted to this climate through deep root systems and drought resistance. This adaptation allows them to survive periods of water scarcity.",
+    "question_text": "According to the passage, native plants in the Rio Grande Valley have adapted to the climate through",
+    "answer_choices": [
+      "requiring minimal sunlight",
+      "developing deep root systems and drought resistance",
+      "migrating to cooler regions seasonally",
+      "competing for rainfall with other species"
+    ],
+    "correct_answer": "B",
+    "explanation": "The passage explicitly states 'Native plants have adapted to this climate through deep root systems and drought resistance.' This directly answers the question.",
+    "metadata": {"domain": "Science", "skill": "Direct evidence", "difficulty": "Easy"}
+  },
+  {
+    "id": "q_50",
+    "prompt": "Jawole Willa Jo Zollar is a pioneering choreographer whose dance works explore themes of African American history, social justice, and human resilience. Her choreography blends contemporary dance techniques with African and Caribbean movement vocabularies. Through dance, Zollar creates platforms for marginalized voices and stories.",
+    "question_text": "Based on the passage, Zollar's choreographic approach is primarily characterized by",
+    "answer_choices": [
+      "adherence to classical ballet traditions",
+      "focus on exclusively European movement styles",
+      "blending contemporary techniques with African and Caribbean vocabularies",
+      "emphasis on commercial entertainment value"
+    ],
+    "correct_answer": "C",
+    "explanation": "The passage states her choreography 'blends contemporary dance techniques with African and Caribbean movement vocabularies.' This blend is presented as characteristic of her approach.",
+    "metadata": {"domain": "Reading", "skill": "Inference", "difficulty": "Medium"}
+  },
+  {
+    "id": "q_51",
+    "prompt": "Sugar maple trees play a vital role in forest ecosystems and North American culture. Climate change and atmospheric nitrogen deposition are causing radical changes in sugar maple growth patterns. Some regions experience stunted growth, while others see unexpected expansion. These changes have significant implications for maple syrup production and forest management.",
+    "question_text": "The passage suggests that environmental factors are affecting sugar maple trees by causing",
+    "answer_choices": [
+      "consistent growth across all regions",
+      "radical changes with varied regional effects",
+      "the extinction of the species",
+      "increased production of maple syrup"
+    ],
+    "correct_answer": "B",
+    "explanation": "The passage states 'radical changes in sugar maple growth patterns' with some regions experiencing 'stunted growth' while 'others see unexpected expansion.' This describes varied regional effects.",
+    "metadata": {"domain": "Reading", "skill": "Inference", "difficulty": "Medium"}
+  },
+  {
+    "id": "q_52",
+    "prompt": "Antarctic flowering plants represent some of Earth's most extreme organisms. These plants survive in one of the harshest environments on the planet, where temperatures plummet and wind speeds are extreme. Climate change is altering growing seasons and precipitation patterns in Antarctica. Scientists monitor these plants to understand ecosystem responses to rapid environmental change.",
+    "question_text": "According to the passage, Antarctic flowering plants are studied because they",
+    "answer_choices": [
+      "are economically valuable for agriculture",
+      "provide food for Antarctic wildlife",
+      "reveal how ecosystems respond to environmental change",
+      "are the most common plants in polar regions"
+    ],
+    "correct_answer": "C",
+    "explanation": "The passage states 'Scientists monitor these plants to understand ecosystem responses to rapid environmental change.' This directly explains why they are studied.",
+    "metadata": {"domain": "Science", "skill": "Direct evidence", "difficulty": "Medium"}
+  },
+  {
+    "id": "q_53",
+    "prompt": "Which pair of words are antonyms?",
+    "question_text": "Identify the antonym pair",
+    "answer_choices": [
+      "verbose, talkative",
+      "concise, brief",
+      "abundant, plentiful",
+      "languid, energetic"
+    ],
+    "correct_answer": "D",
+    "explanation": "'Languid' (slow, lacking energy) and 'energetic' (full of energy, vigorous) are antonyms. The other pairs are synonyms.",
+    "metadata": {"domain": "English", "skill": "Vocabulary", "difficulty": "Easy"}
+  },
+  {
+    "id": "q_54",
+    "prompt": "In the above passage, the author's primary purpose appears to be:",
+    "question_text": "What is the main purpose of this scientific article?",
+    "answer_choices": [
+      "To entertain readers with interesting facts",
+      "To explain a natural phenomenon and its causes",
+      "To criticize environmental policies",
+      "To promote a particular political agenda"
+    ],
+    "correct_answer": "B",
+    "explanation": "Scientific articles typically aim to explain phenomena and their causes. Without seeing the specific passage, B is the most likely primary purpose of a scientific article.",
+    "metadata": {"domain": "Reading", "skill": "Main idea", "difficulty": "Medium"}
+  },
+  {
+    "id": "q_55",
+    "prompt": "Carbon dioxide serves as an attractant cue for frog-biting midges, influencing their host-finding behavior. Research demonstrates that midges use CO₂ detection to locate potential hosts across water surfaces. This mechanism plays a crucial role in disease transmission in certain regions.",
+    "question_text": "According to the passage, carbon dioxide's role in frog-biting midge behavior is that it",
+    "answer_choices": [
+      "provides the primary food source",
+      "serves as a signal for host detection",
+      "increases water temperature",
+      "repels the midges from certain areas"
+    ],
+    "correct_answer": "B",
+    "explanation": "The passage explicitly states that 'midges use CO₂ detection to locate potential hosts,' establishing CO₂ as a host-detection signal.",
+    "metadata": {"domain": "Science", "skill": "Direct evidence", "difficulty": "Medium"}
+  },
+  {
+    "id": "q_56",
+    "prompt": "Environmental risks associated with nanohybrids—materials combining nanoparticles with traditional compounds—are still being studied. Some research suggests potential toxicity to aquatic organisms, while other studies find minimal environmental impact. Regulatory agencies continue to evaluate safety standards for nanohybrid products and their disposal.",
+    "question_text": "Based on the passage, the environmental safety of nanohybrids is currently",
+    "answer_choices": [
+      "completely understood by all scientists",
+      "not yet fully determined and still being studied",
+      "proven to be entirely safe",
+      "known to be highly toxic in all cases"
+    ],
+    "correct_answer": "B",
+    "explanation": "The passage states risks 'are still being studied' and mentions conflicting research findings, indicating the safety profile is not yet fully determined.",
+    "metadata": {"domain": "Science", "skill": "Inference", "difficulty": "Medium"}
+  },
+  {
+    "id": "q_57",
+    "prompt": "Ebony and Topaz was a groundbreaking literary magazine founded to showcase African American literature and promote Black publishers during the Harlem Renaissance. The magazine featured poetry, short stories, and essays that challenged racial stereotypes. Through its diverse selection of contributing writers, Ebony and Topaz created a platform for Black voices during a transformative period.",
+    "question_text": "The passage indicates that Ebony and Topaz was significant because it",
+    "answer_choices": [
+      "was the first literary magazine ever published",
+      "exclusively published poetry without prose",
+      "created a platform to showcase African American literature and challenge stereotypes",
+      "discouraged participation from emerging writers"
+    ],
+    "correct_answer": "C",
+    "explanation": "The passage describes how the magazine 'featured poetry, short stories, and essays that challenged racial stereotypes' and 'created a platform for Black voices.' Option C captures this significance.",
+    "metadata": {"domain": "History", "skill": "Inference", "difficulty": "Medium"}
+  },
+  {
+    "id": "q_58",
+    "prompt": "If a student scores 85, 92, 78, and 88 on four tests, what is their average score?",
+    "question_text": "Calculate the average test score",
+    "answer_choices": ["80.75", "85.75", "88.5", "92"],
+    "correct_answer": "B",
+    "explanation": "(85 + 92 + 78 + 88) / 4 = 343 / 4 = 85.75",
+    "metadata": {"domain": "Math", "skill": "Statistics", "difficulty": "Easy"}
+  },
+  {
+    "id": "q_59",
+    "prompt": "If a laptop is discounted from $1,200 to $900, what is the percentage discount?",
+    "question_text": "Calculate the discount percentage",
+    "answer_choices": ["20%", "25%", "30%", "35%"],
+    "correct_answer": "B",
+    "explanation": "Discount = $1,200 - $900 = $300. Percentage = ($300 / $1,200) × 100 = 25%",
+    "metadata": {"domain": "Math", "skill": "Percentages", "difficulty": "Medium"}
+  },
+  {
+    "id": "q_60",
+    "prompt": "The FESTAC '77 (Second World Black and African Festival of Arts and Culture) was a landmark cultural event that celebrated African diaspora heritage. Held in Lagos, Nigeria, the festival brought together artists, performers, and intellectuals from Africa and the diaspora. The event demonstrated the global reach and influence of Black cultural production.",
+    "question_text": "According to the passage, FESTAC '77 was significant because it",
+    "answer_choices": [
+      "was held exclusively in Nigeria",
+      "limited participation to only African artists",
+      "brought together African diaspora artists and demonstrated global Black cultural influence",
+      "was the first international cultural festival ever held"
+    ],
+    "correct_answer": "C",
+    "explanation": "The passage describes how the festival 'brought together artists, performers, and intellectuals from Africa and the diaspora' and 'demonstrated the global reach and influence of Black cultural production.' Option C captures this.",
+    "metadata": {"domain": "History", "skill": "Inference", "difficulty": "Medium"}
+  }
+]

@@ -1,0 +1,6 @@
+fastapi
+google-genai
+python-dotenv
+python-multipart
+supermemory
+uvicorn

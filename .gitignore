@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+
+# Environment
+.env.local
+.env
+
+# Runtime artifacts
+data/runs/
+data/uploads/
+
+# Legacy artifact folders
+runs/
+uploads/
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.vscode/

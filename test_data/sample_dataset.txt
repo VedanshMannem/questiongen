@@ -1,0 +1,14 @@
+Q1: If 3x + 5 = 20, what is x?
+A1: 5
+
+Q2: Which number is a prime: 15, 17, 21?
+A2: 17
+
+Q3: Read the passage: "The cat sat on the mat." What did the cat sit on?
+A3: the mat
+
+Q4: Solve: If a rectangle has width 4 and length 7, what is its area?
+A4: 28
+
+Q5: Which word is a synonym of 'quick'? fast, slow, heavy
+A5: fast
