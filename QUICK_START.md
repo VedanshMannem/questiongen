@@ -53,7 +53,13 @@ Artifacts are written to `data/runs/run_<timestamp>_<id>/`.
 ## 5) Run API Server
 
 ```bash
-uvicorn api.main:app --reload
+uvicorn api.main:app --host 0.0.0.0 --port 8000 --reload
+```
+
+Production command:
+
+```bash
+uvicorn api.main:app --host 0.0.0.0 --port ${PORT:-8000}
 ```
 
 Available endpoints:

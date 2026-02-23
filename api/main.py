@@ -346,3 +346,10 @@ def get_features_file(feature_run_id: str) -> JSONResponse:
             "features_file": features_file.replace("\\", "/"),
         }
     )
+
+
+if __name__ == "__main__":
+    import uvicorn
+
+    port = int(os.getenv("PORT", "8000"))
+    uvicorn.run("api.main:app", host="0.0.0.0", port=port)
