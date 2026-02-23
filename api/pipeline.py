@@ -8,6 +8,7 @@ from collections import defaultdict
 from typing import Any, Dict, List, Optional
 
 from . import llm
+from . import dataset_analysis
 from .storage import create_run_dir, data_dir, run_path, save_json
 
 REQUIRED_FIELDS = ["prompt", "question_text"]
@@ -20,13 +21,15 @@ class PipelineError(Exception):
 DEBUG_LOGS = os.getenv("SATQ_DEBUG", "1").lower() not in {"0", "false", "no"}
 LLM_EXTRACTION_MAX_QUESTIONS = max(1, int(os.getenv("SATQ_LLM_EXTRACTION_MAX_QUESTIONS", "20")))
 LLM_EXTRACTION_BATCH_SIZE = max(1, min(20, int(os.getenv("SATQ_LLM_EXTRACTION_BATCH_SIZE", "20"))))
-CACHE_VERSION = "v1"
+CACHE_VERSION = "v3"
 CACHE_ARTIFACTS = [
     "input_normalized.json",
     "insights.json",
     "question_features.json",
     "graph_nodes.json",
     "catalogs.json",
+    "dataset_analysis.json",
+    "features.json",
 ]
 
 
@@ -172,23 +175,8 @@ def _infer_answer_type(q: Dict[str, Any]) -> str:
 
 
 def _infer_question_skeleton(prompt: str, question_text: str) -> str:
-    full_text = f"{prompt} {question_text}".lower()
-
-    if "most logically completes" in full_text or "______" in prompt or "\nblank" in prompt.lower():
-        return "logical_completion"
-    if "main idea" in full_text:
-        return "main_idea"
-    if "which finding" in full_text and "support" in full_text:
-        return "supporting_evidence"
-    if "weaken" in full_text:
-        return "weaken_claim"
-    if "according to the text" in full_text:
-        return "text_retrieval"
-    if "graph" in full_text or "table" in full_text or "data" in full_text:
-        return "data_interpretation"
-    if "inferred" in full_text or "inference" in full_text:
-        return "inference"
-    return "general_reasoning"
+    _, _, template = dataset_analysis.infer_skeleton_template({"prompt": prompt, "question_text": question_text})
+    return template
 
 
 def _clean_text_snippet(text: str, max_len: int) -> str:
@@ -227,10 +215,16 @@ def _extract_algorithmic_features(questions: List[Dict[str, Any]]) -> List[Dict[
 
         answer_lengths = [len(str(choice)) for choice in answer_choices]
 
+        skeleton_key, skeleton_name, skeleton_template = dataset_analysis.infer_skeleton_template(
+            {"prompt": prompt, "question_text": question_text}
+        )
+
         feature = {
             "id": q.get("id"),
             "topic": _infer_topic(q),
-            "question_skeleton": _infer_question_skeleton(prompt, question_text),
+            "question_skeleton": skeleton_template,
+            "question_skeleton_key": skeleton_key,
+            "question_skeleton_name": skeleton_name,
             "answer_type": _infer_answer_type(q),
             "metadata": {
                 "assessment": metadata.get("assessment"),
@@ -412,6 +406,206 @@ def _pick_example(questions: List[Dict[str, Any]]) -> Dict[str, Any]:
         "answer_choices": questions[0].get("answer_choices"),
         "correct_answer": questions[0].get("correct_answer"),
         "explanation": questions[0].get("explanation"),
+    }
+
+
+def _load_analysis_context(
+    normalized: List[Dict[str, Any]],
+    bundled_analysis: Optional[Dict[str, Any]] = None,
+    analysis_file: Optional[str] = None,
+) -> Dict[str, Any]:
+    analysis: Dict[str, Any] = bundled_analysis or {}
+    if analysis_file:
+        if not os.path.isfile(analysis_file):
+            raise PipelineError(f"analysis_file not found: {analysis_file}")
+        with open(analysis_file, "r", encoding="utf-8") as f:
+            analysis = json.load(f)
+
+    if not analysis:
+        analysis = dataset_analysis.analyze_questions(normalized)
+    return analysis
+
+
+def _generate_questions_from_features(
+    normalized: List[Dict[str, Any]],
+    features: List[Dict[str, Any]],
+    question_topic: str,
+    question_skeleton: str,
+    answer_type: str,
+    count: int,
+    analysis: Dict[str, Any],
+    user_context: Optional[str] = None,
+) -> List[Dict[str, Any]]:
+    sample_question = _select_sample_question(normalized, features, question_topic, answer_type)
+    style_profile = _style_profile_for_topic(features, question_topic, answer_type)
+    style_profile["requested_metadata"] = _infer_requested_metadata(features, question_topic)
+    dataset_context = _compact_generation_context(analysis)
+
+    generated: List[Dict[str, Any]] = []
+    seen_signatures: set = set()
+    max_attempts_per_question = 5
+
+    for index in range(count):
+        generated_item: Optional[Dict[str, Any]] = None
+        last_error: Optional[str] = None
+        for attempt in range(1, max_attempts_per_question + 1):
+            try:
+                context = (user_context or "") + f"\nvariation_request: item={index + 1}, attempt={attempt}"
+                raw = llm.generate_question_from_features(
+                    question_topic=question_topic,
+                    question_skeleton=question_skeleton,
+                    answer_type=answer_type,
+                    sample_question=sample_question,
+                    style_profile=style_profile,
+                    dataset_context=dataset_context,
+                    user_context=context,
+                )
+            except Exception as exc:
+                last_error = str(exc)
+                if DEBUG_LOGS:
+                    print(f"[DEBUG][pipeline] generation_error item={index + 1} attempt={attempt} err={exc}")
+                continue
+
+            candidate = _finalize_generated(raw, answer_type)
+            if _is_too_similar(candidate, sample_question, seen_signatures):
+                if DEBUG_LOGS:
+                    print(f"[DEBUG][pipeline] rejected_similar item={index + 1} attempt={attempt}")
+                continue
+
+            generated_item = candidate
+            signature = _signature_for_generated(generated_item)
+            seen_signatures.add(signature)
+            if DEBUG_LOGS:
+                preview = (generated_item.get("question_text") or "")[:140]
+                print(f"[DEBUG][pipeline] accepted item={index + 1} attempt={attempt} q_preview={preview}")
+            break
+
+        if generated_item is None:
+            raise PipelineError(
+                f"Failed to generate unique question {index + 1}/{count} after {max_attempts_per_question} attempts. "
+                f"Last model error: {last_error or 'unknown'}"
+            )
+
+        generated_item["requested_topic"] = question_topic
+        generated_item["requested_skeleton"] = question_skeleton
+        generated_item["metadata"] = style_profile.get("requested_metadata", {})
+        generated.append(generated_item)
+
+    return generated
+
+
+def _load_features_bundle(features_file: str) -> Dict[str, Any]:
+    if not os.path.isfile(features_file):
+        raise PipelineError(f"features_file not found: {features_file}")
+    with open(features_file, "r", encoding="utf-8") as f:
+        bundle = json.load(f)
+    if not isinstance(bundle.get("normalized_questions"), list) or not isinstance(bundle.get("question_features"), list):
+        raise PipelineError("features_file must contain 'normalized_questions' and 'question_features' arrays.")
+    return bundle
+
+
+def _build_weighted_generation_plan(features: List[Dict[str, Any]], count: int) -> List[Dict[str, Any]]:
+    if not features:
+        raise PipelineError("No question features found in features_file.")
+    sampled = random.choices(features, k=count)
+    plan: List[Dict[str, Any]] = []
+    for item in sampled:
+        plan.append(
+            {
+                "question_topic": item.get("topic") or "General",
+                "question_skeleton": item.get("question_skeleton") or "General textual reasoning pattern.",
+                "answer_type": item.get("answer_type") or "multiple_choice",
+                "target_metadata": item.get("metadata") or {},
+            }
+        )
+    return plan
+
+
+def _finalize_problem_set_items(
+    raw_items: List[Dict[str, Any]],
+    plan: List[Dict[str, Any]],
+    sample_question: Dict[str, Any],
+) -> List[Dict[str, Any]]:
+    finalized: List[Dict[str, Any]] = []
+    for index, request in enumerate(plan):
+        answer_type = str(request.get("answer_type") or "multiple_choice")
+        raw = raw_items[index] if index < len(raw_items) and isinstance(raw_items[index], dict) else {}
+        if not raw:
+            raw = _fallback_generated_mc(sample_question)
+
+        item = _finalize_generated(raw, answer_type)
+        item["requested_topic"] = request.get("question_topic")
+        item["requested_skeleton"] = request.get("question_skeleton")
+        item["metadata"] = request.get("target_metadata") or {}
+        finalized.append(item)
+    return finalized
+
+
+def _write_features_bundle(
+    run_dir: str,
+    normalized: List[Dict[str, Any]],
+    insights: Dict[str, Any],
+    features: List[Dict[str, Any]],
+    graph_nodes: List[Dict[str, Any]],
+    catalogs: Dict[str, List[str]],
+    analysis: Dict[str, Any],
+) -> None:
+    bundle = {
+        "normalized_questions": normalized,
+        "insights": insights,
+        "question_features": features,
+        "graph_nodes": graph_nodes,
+        "catalogs": catalogs,
+        "dataset_analysis": analysis,
+    }
+    save_json(os.path.join(run_dir, "features.json"), bundle)
+
+
+def _compact_generation_context(analysis: Dict[str, Any]) -> Dict[str, Any]:
+    skeletons = (analysis.get("question_skeleton_catalog", {}) or {}).get("observed", [])[:12]
+    return {
+        "dataset_size": analysis.get("dataset_size", 0),
+        "metadata_summary": analysis.get("metadata_summary", {}),
+        "length_summary": analysis.get("length_summary", {}),
+        "core_topics": (analysis.get("core_topics", {}) or {}).get("groups", [])[:12],
+        "question_skeletons": [
+            {
+                "key": item.get("key"),
+                "name": item.get("name"),
+                "template": item.get("template"),
+                "count": item.get("count"),
+            }
+            for item in skeletons
+        ],
+    }
+
+
+def _infer_requested_metadata(features: List[Dict[str, Any]], question_topic: str) -> Dict[str, str]:
+    matched: List[Dict[str, Any]] = []
+    for feature in features:
+        if (feature.get("topic") or "") == question_topic:
+            matched.append(feature)
+
+    if not matched:
+        matched = features
+
+    def most_common(field: str, fallback: str = "Unknown") -> str:
+        counts: Dict[str, int] = defaultdict(int)
+        for item in matched:
+            meta = item.get("metadata") or {}
+            value = str(meta.get(field) or "").strip()
+            if value:
+                counts[value] += 1
+        if not counts:
+            return fallback
+        return max(counts, key=lambda key: counts[key])
+
+    return {
+        "assessment": "SAT",
+        "section": most_common("section", "Reading and Writing"),
+        "domain": most_common("domain"),
+        "skill": most_common("skill"),
+        "difficulty": most_common("difficulty", "Medium"),
     }
 
 
@@ -603,6 +797,8 @@ def run_feature_extraction(upload_path: str, run_id: str, use_llm: bool = True) 
                 "question_features": "question_features.json",
                 "graph_nodes": "graph_nodes.json",
                 "catalogs": "catalogs.json",
+                "dataset_analysis": "dataset_analysis.json",
+                "features": "features.json",
             },
         }
         save_json(os.path.join(run_dir, "run.json"), summary)
@@ -620,6 +816,9 @@ def run_feature_extraction(upload_path: str, run_id: str, use_llm: bool = True) 
     features = _extract_algorithmic_features(normalized)
     save_json(os.path.join(run_dir, "question_features.json"), features)
 
+    analysis = dataset_analysis.analyze_questions(normalized)
+    save_json(os.path.join(run_dir, "dataset_analysis.json"), analysis)
+
     seed_nodes = _features_to_seed_nodes(features)
     llm_nodes = _extract_nodes(normalized) if use_llm else []
     graph_nodes = seed_nodes + llm_nodes
@@ -627,6 +826,15 @@ def run_feature_extraction(upload_path: str, run_id: str, use_llm: bool = True) 
 
     catalogs = _build_catalogs(graph_nodes, features)
     save_json(os.path.join(run_dir, "catalogs.json"), catalogs)
+    _write_features_bundle(
+        run_dir=run_dir,
+        normalized=normalized,
+        insights=insights,
+        features=features,
+        graph_nodes=graph_nodes,
+        catalogs=catalogs,
+        analysis=analysis,
+    )
 
     summary = {
         "run_id": run_id,
@@ -640,6 +848,8 @@ def run_feature_extraction(upload_path: str, run_id: str, use_llm: bool = True) 
             "question_features": "question_features.json",
             "graph_nodes": "graph_nodes.json",
             "catalogs": "catalogs.json",
+            "dataset_analysis": "dataset_analysis.json",
+            "features": "features.json",
         },
     }
 
@@ -659,6 +869,7 @@ def run_question_generation(
     question_skeleton: str,
     answer_type: str,
     count: int,
+    analysis_file: Optional[str] = None,
     user_context: Optional[str] = None,
 ) -> Dict[str, Any]:
     if count < 1:
@@ -678,56 +889,30 @@ def run_question_generation(
     with open(features_path, "r", encoding="utf-8") as f:
         features = json.load(f)
 
-    sample_question = _select_sample_question(normalized, features, question_topic, answer_type)
-    style_profile = _style_profile_for_topic(features, question_topic, answer_type)
+    bundled_analysis: Dict[str, Any] = {}
+    default_analysis_path = os.path.join(source_dir, "dataset_analysis.json")
+    if os.path.isfile(default_analysis_path):
+        with open(default_analysis_path, "r", encoding="utf-8") as f:
+            bundled_analysis = json.load(f)
 
-    generated: List[Dict[str, Any]] = []
-    seen_signatures: set = set()
-    max_attempts_per_question = 5
+    analysis = _load_analysis_context(
+        normalized=normalized,
+        bundled_analysis=bundled_analysis,
+        analysis_file=analysis_file,
+    )
+    if not os.path.isfile(default_analysis_path) and not analysis_file:
+        save_json(default_analysis_path, analysis)
 
-    for index in range(count):
-        generated_item: Optional[Dict[str, Any]] = None
-        last_error: Optional[str] = None
-        for attempt in range(1, max_attempts_per_question + 1):
-            try:
-                context = (user_context or "") + f"\nvariation_request: item={index + 1}, attempt={attempt}"
-                raw = llm.generate_question_from_features(
-                    question_topic=question_topic,
-                    question_skeleton=question_skeleton,
-                    answer_type=answer_type,
-                    sample_question=sample_question,
-                    style_profile=style_profile,
-                    user_context=context,
-                )
-            except Exception as exc:
-                last_error = str(exc)
-                if DEBUG_LOGS:
-                    print(f"[DEBUG][pipeline] generation_error item={index + 1} attempt={attempt} err={exc}")
-                continue
-
-            candidate = _finalize_generated(raw, answer_type)
-            if _is_too_similar(candidate, sample_question, seen_signatures):
-                if DEBUG_LOGS:
-                    print(f"[DEBUG][pipeline] rejected_similar item={index + 1} attempt={attempt}")
-                continue
-
-            generated_item = candidate
-            signature = _signature_for_generated(generated_item)
-            seen_signatures.add(signature)
-            if DEBUG_LOGS:
-                preview = (generated_item.get("question_text") or "")[:140]
-                print(f"[DEBUG][pipeline] accepted item={index + 1} attempt={attempt} q_preview={preview}")
-            break
-
-        if generated_item is None:
-            raise PipelineError(
-                f"Failed to generate unique question {index + 1}/{count} after {max_attempts_per_question} attempts. "
-                f"Last model error: {last_error or 'unknown'}"
-            )
-
-        generated_item["requested_topic"] = question_topic
-        generated_item["requested_skeleton"] = question_skeleton
-        generated.append(generated_item)
+    generated = _generate_questions_from_features(
+        normalized=normalized,
+        features=features,
+        question_topic=question_topic,
+        question_skeleton=question_skeleton,
+        answer_type=answer_type,
+        count=count,
+        analysis=analysis,
+        user_context=user_context,
+    )
 
     run_dir = create_run_dir(run_id)
     save_json(os.path.join(run_dir, "generation_request.json"), {
@@ -736,6 +921,7 @@ def run_question_generation(
         "question_skeleton": question_skeleton,
         "answer_type": answer_type,
         "count": count,
+        "analysis_file": analysis_file,
     })
     save_json(os.path.join(run_dir, "generated_questions.json"), generated)
 
@@ -753,10 +939,220 @@ def run_question_generation(
     return summary
 
 
+def run_question_generation_from_features_file(
+    features_file: str,
+    run_id: str,
+    question_topic: str,
+    question_skeleton: str,
+    answer_type: str,
+    count: int,
+    analysis_file: Optional[str] = None,
+    user_context: Optional[str] = None,
+) -> Dict[str, Any]:
+    if count < 1:
+        raise PipelineError("count must be >= 1")
+
+    if not os.path.isfile(features_file):
+        raise PipelineError(f"features_file not found: {features_file}")
+
+    with open(features_file, "r", encoding="utf-8") as f:
+        bundle = json.load(f)
+
+    normalized = bundle.get("normalized_questions")
+    features = bundle.get("question_features")
+    bundled_analysis = bundle.get("dataset_analysis") or {}
+
+    if not isinstance(normalized, list) or not isinstance(features, list):
+        raise PipelineError("features_file must contain 'normalized_questions' and 'question_features' arrays.")
+
+    analysis = _load_analysis_context(
+        normalized=normalized,
+        bundled_analysis=bundled_analysis,
+        analysis_file=analysis_file,
+    )
+
+    generated = _generate_questions_from_features(
+        normalized=normalized,
+        features=features,
+        question_topic=question_topic,
+        question_skeleton=question_skeleton,
+        answer_type=answer_type,
+        count=count,
+        analysis=analysis,
+        user_context=user_context,
+    )
+
+    run_dir = create_run_dir(run_id)
+    save_json(
+        os.path.join(run_dir, "generation_request.json"),
+        {
+            "features_file": features_file,
+            "question_topic": question_topic,
+            "question_skeleton": question_skeleton,
+            "answer_type": answer_type,
+            "count": count,
+            "analysis_file": analysis_file,
+        },
+    )
+    save_json(os.path.join(run_dir, "generated_questions.json"), generated)
+
+    summary = {
+        "run_id": run_id,
+        "phase": "question_generation",
+        "source_features_file": features_file,
+        "generated_count": len(generated),
+        "artifacts": {
+            "generation_request": "generation_request.json",
+            "generated_questions": "generated_questions.json",
+        },
+    }
+    save_json(os.path.join(run_dir, "run.json"), summary)
+    return summary
+
+
+def run_random_question_from_features_file(
+    features_file: str,
+    run_id: str,
+    analysis_file: Optional[str] = None,
+    user_context: Optional[str] = None,
+) -> Dict[str, Any]:
+    bundle = _load_features_bundle(features_file)
+    normalized_raw = bundle.get("normalized_questions")
+    features_raw = bundle.get("question_features")
+    bundled_analysis = bundle.get("dataset_analysis") or {}
+
+    if not isinstance(normalized_raw, list) or not isinstance(features_raw, list):
+        raise PipelineError("features_file must contain 'normalized_questions' and 'question_features' arrays.")
+
+    normalized: List[Dict[str, Any]] = normalized_raw
+    features: List[Dict[str, Any]] = features_raw
+
+    plan = _build_weighted_generation_plan(features, 1)
+    request = plan[0]
+    analysis = _load_analysis_context(
+        normalized=normalized,
+        bundled_analysis=bundled_analysis,
+        analysis_file=analysis_file,
+    )
+
+    generated = _generate_questions_from_features(
+        normalized=normalized,
+        features=features,
+        question_topic=str(request.get("question_topic") or "General"),
+        question_skeleton=str(request.get("question_skeleton") or "General textual reasoning pattern."),
+        answer_type=str(request.get("answer_type") or "multiple_choice"),
+        count=1,
+        analysis=analysis,
+        user_context=user_context,
+    )
+
+    run_dir = create_run_dir(run_id)
+    save_json(
+        os.path.join(run_dir, "generation_request.json"),
+        {
+            "features_file": features_file,
+            "mode": "random_question",
+            "analysis_file": analysis_file,
+        },
+    )
+    save_json(os.path.join(run_dir, "generated_questions.json"), generated)
+
+    summary = {
+        "run_id": run_id,
+        "phase": "question_generation",
+        "mode": "random_question",
+        "source_features_file": features_file,
+        "generated_count": 1,
+        "generated_questions": generated,
+        "artifacts": {
+            "generation_request": "generation_request.json",
+            "generated_questions": "generated_questions.json",
+        },
+    }
+    save_json(os.path.join(run_dir, "run.json"), summary)
+    return summary
+
+
+def run_problem_set_generation_from_features_file(
+    features_file: str,
+    run_id: str,
+    count: int,
+    analysis_file: Optional[str] = None,
+    user_context: Optional[str] = None,
+) -> Dict[str, Any]:
+    if count < 1:
+        raise PipelineError("count must be >= 1")
+
+    bundle = _load_features_bundle(features_file)
+    normalized_raw = bundle.get("normalized_questions")
+    features_raw = bundle.get("question_features")
+    bundled_analysis = bundle.get("dataset_analysis") or {}
+
+    if not isinstance(normalized_raw, list) or not isinstance(features_raw, list):
+        raise PipelineError("features_file must contain 'normalized_questions' and 'question_features' arrays.")
+
+    normalized: List[Dict[str, Any]] = normalized_raw
+    features: List[Dict[str, Any]] = features_raw
+
+    analysis = _load_analysis_context(
+        normalized=normalized,
+        bundled_analysis=bundled_analysis,
+        analysis_file=analysis_file,
+    )
+    plan = _build_weighted_generation_plan(features, count)
+    sample_question = _pick_example(normalized)
+    dataset_context = _compact_generation_context(analysis)
+
+    raw_items: List[Dict[str, Any]] = []
+    try:
+        raw_items = llm.generate_question_set_from_plan(
+            plan=plan,
+            sample_question=sample_question,
+            dataset_context=dataset_context,
+            user_context=user_context,
+        )
+    except Exception as exc:
+        if DEBUG_LOGS:
+            print(f"[DEBUG][pipeline] problem_set_batch_generation_error err={exc}")
+
+    if not raw_items:
+        raw_items = []
+
+    generated = _finalize_problem_set_items(raw_items=raw_items, plan=plan, sample_question=sample_question)
+
+    run_dir = create_run_dir(run_id)
+    save_json(
+        os.path.join(run_dir, "generation_request.json"),
+        {
+            "features_file": features_file,
+            "mode": "problem_set",
+            "count": count,
+            "analysis_file": analysis_file,
+        },
+    )
+    save_json(os.path.join(run_dir, "generated_questions.json"), generated)
+
+    summary = {
+        "run_id": run_id,
+        "phase": "question_generation",
+        "mode": "problem_set",
+        "source_features_file": features_file,
+        "generated_count": len(generated),
+        "generated_questions": generated,
+        "artifacts": {
+            "generation_request": "generation_request.json",
+            "generated_questions": "generated_questions.json",
+        },
+    }
+    save_json(os.path.join(run_dir, "run.json"), summary)
+    return summary
+
+
 def _generate_questions(
     catalogs: Dict[str, List[str]],
     example_question: Dict[str, Any],
     count: int,
+    dataset_context: Optional[Dict[str, Any]] = None,
     user_context: Optional[str] = None,
 ) -> List[Dict[str, Any]]:
     topics = catalogs.get("topics") or []
@@ -792,6 +1188,7 @@ def _generate_questions(
                     logic,
                     answer,
                     example_question,
+                    dataset_context=dataset_context,
                     user_context=context,
                 )
             except Exception as exc:
@@ -836,12 +1233,23 @@ def run_pipeline(
         normalized = json.load(f)
     with open(os.path.join(run_dir, "catalogs.json"), "r", encoding="utf-8") as f:
         catalogs = json.load(f)
+    analysis_context: Dict[str, Any] = {}
+    analysis_path = os.path.join(run_dir, "dataset_analysis.json")
+    if os.path.isfile(analysis_path):
+        with open(analysis_path, "r", encoding="utf-8") as f:
+            analysis_context = _compact_generation_context(json.load(f))
 
     generated: List[Dict[str, Any]] = []
     if generate_count > 0:
         user_context = memory_query if memory_query else ""
         example = _pick_example(normalized)
-        generated = _generate_questions(catalogs, example, generate_count, user_context=user_context)
+        generated = _generate_questions(
+            catalogs,
+            example,
+            generate_count,
+            dataset_context=analysis_context,
+            user_context=user_context,
+        )
         save_json(os.path.join(run_dir, "generated_questions.json"), generated)
 
     compat_summary = {
@@ -856,6 +1264,7 @@ def run_pipeline(
             "question_features": "question_features.json",
             "graph_nodes": "graph_nodes.json" if extract_nodes or generate_count > 0 else None,
             "catalogs": "catalogs.json" if extract_nodes or generate_count > 0 else None,
+            "dataset_analysis": "dataset_analysis.json",
             "generated_questions": "generated_questions.json" if generate_count > 0 else None,
         },
     }

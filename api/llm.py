@@ -153,6 +153,7 @@ def generate_question(
     logic_skeleton: str,
     answer_skeleton: str,
     example_question: Dict[str, Any],
+    dataset_context: Optional[Dict[str, Any]] = None,
     user_context: Optional[str] = None,
 ) -> Dict[str, Any]:
 
@@ -170,6 +171,9 @@ def generate_question(
 
         Example style reference:
         {json.dumps(example_question, ensure_ascii=False)}
+
+        Dataset context (metadata/length/topic/skeleton priors):
+        {json.dumps(dataset_context or {}, ensure_ascii=False)}
 
         Optional user context:
         {user_context or ""}
@@ -200,6 +204,7 @@ def generate_question_from_features(
     answer_type: str,
     sample_question: Dict[str, Any],
     style_profile: Dict[str, Any],
+    dataset_context: Optional[Dict[str, Any]] = None,
     user_context: Optional[str] = None,
 ) -> Dict[str, Any]:
     prompt = f"""Generate one SAT-style question.
@@ -208,6 +213,7 @@ Inputs:
 - skeleton: {question_skeleton}
 - answer_type: {answer_type}
 - style_profile: {json.dumps(style_profile, ensure_ascii=False)}
+- dataset_context: {json.dumps(dataset_context or {}, ensure_ascii=False)}
 - sample_question: {json.dumps(sample_question, ensure_ascii=False)}
 - user_context: {user_context or ''}
 
@@ -233,3 +239,48 @@ Return JSON only."""
             print(f"[DEBUG][llm] raw_output={raw_text}")
         text = _clean_json_text(raw_text)
         raise RuntimeError(f"Failed to parse JSON from LLM output: {e}\nOutput was:\n{text}") from e
+
+
+def generate_question_set_from_plan(
+    plan: List[Dict[str, Any]],
+    sample_question: Dict[str, Any],
+    dataset_context: Optional[Dict[str, Any]] = None,
+    user_context: Optional[str] = None,
+) -> List[Dict[str, Any]]:
+    prompt = f"""Generate a SAT-style question set in one response.
+Inputs:
+- generation_plan: {json.dumps(plan, ensure_ascii=False)}
+- sample_question: {json.dumps(sample_question, ensure_ascii=False)}
+- dataset_context: {json.dumps(dataset_context or {}, ensure_ascii=False)}
+- user_context: {user_context or ''}
+
+Rules:
+- Return exactly one question object per generation_plan item, in the same order.
+- Keep each item original and distinct.
+- Do not copy or near-copy sample text.
+- For multiple_choice items: include exactly 1 correct_answer_text and exactly 3 distractors.
+- For free_response items: include expected_answer.
+
+Return JSON array only, where each item has:
+{{
+  "prompt": "...",
+  "question_text": "...",
+  "answer_type": "multiple_choice|free_response",
+  "correct_answer_text": "...",
+  "distractors": ["...", "...", "..."],
+  "expected_answer": "...",
+  "explanation": "..."
+}}"""
+
+    raw_text = _invoke_model(prompt)
+    try:
+        parsed = _parse_json_with_recovery(raw_text)
+        if not isinstance(parsed, list):
+            raise ValueError("Model output for question set must be a JSON array")
+        return cast(List[Dict[str, Any]], parsed)
+    except Exception as e:
+        if DEBUG_LOGS:
+            print(f"[DEBUG][llm] generate_question_set_from_plan parse_error={e}")
+            print(f"[DEBUG][llm] raw_output={raw_text}")
+        text = _clean_json_text(raw_text)
+        raise RuntimeError(f"Failed to parse question set JSON: {e}\nOutput was:\n{text}") from e

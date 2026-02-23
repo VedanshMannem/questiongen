@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SAT Question Generator</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #0b1020;
+      --fg: #e8ecf4;
+      --panel: #131a2c;
+      --accent: #66b3ff;
+      --ok: #58d68d;
+      --bad: #ff7a7a;
+      --muted: #9aa4b2;
+    }
+    body {
+      margin: 0;
+      font-family: Inter, Segoe UI, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--fg);
+    }
+    .wrap {
+      max-width: 980px;
+      margin: 24px auto;
+      padding: 0 16px 40px;
+    }
+    h1 { margin: 0 0 16px; font-size: 1.5rem; }
+    .panel {
+      background: var(--panel);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+    label { display: block; margin: 10px 0 6px; font-weight: 600; }
+    input, select, textarea, button {
+      width: 100%;
+      box-sizing: border-box;
+      border-radius: 8px;
+      border: 1px solid #2a3553;
+      background: #0f1526;
+      color: var(--fg);
+      padding: 10px;
+      font-size: 0.95rem;
+    }
+    button {
+      background: #1d2a49;
+      cursor: pointer;
+      border-color: #34466f;
+      font-weight: 600;
+      margin-top: 14px;
+    }
+    button:hover { border-color: var(--accent); }
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .meta { color: var(--muted); font-size: 0.9rem; }
+    .q {
+      background: #0e1527;
+      border: 1px solid #263556;
+      border-radius: 10px;
+      padding: 14px;
+      margin-top: 12px;
+    }
+    .choices { margin-top: 10px; display: grid; gap: 8px; }
+    .choice {
+      text-align: left;
+      border: 1px solid #2b3a5b;
+      background: #101935;
+      padding: 9px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .choice-wrap { display: grid; gap: 4px; }
+    .choice.correct { border-color: var(--ok); }
+    .choice.incorrect { border-color: var(--bad); }
+    .choice-note { font-size: 0.85rem; color: var(--muted); min-height: 1.1em; }
+    .choice-note.ok { color: var(--ok); }
+    .choice-note.bad { color: var(--bad); }
+    .feedback.ok { color: var(--ok); }
+    .feedback.bad { color: var(--bad); }
+    .hidden { display: none; }
+    @media (max-width: 720px) { .row { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>SAT Question Generator UI</h1>
+
+    <div class="panel">
+      <label for="endpoint">Mode</label>
+      <select id="endpoint">
+        <option value="/create-random-question">Create Random Question</option>
+        <option value="/create-question-problem-set">Create Question Problem Set</option>
+      </select>
+
+      <div class="row" id="countRow">
+        <div>
+          <label for="count">Count (problem set only)</label>
+          <input id="count" type="number" min="1" max="100" value="10" />
+        </div>
+      </div>
+
+      <label for="userContext">User context (optional)</label>
+      <textarea id="userContext" rows="3" placeholder="Difficulty, focus areas, etc."></textarea>
+
+      <button id="submitBtn">Generate</button>
+      <button id="clearCacheBtn" type="button">Clear Saved Session</button>
+      <p id="status" class="meta"></p>
+    </div>
+
+    <div id="results"></div>
+  </div>
+  <script src="/web/app.js"></script>
+</body>
+</html>

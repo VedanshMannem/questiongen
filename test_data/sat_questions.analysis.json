@@ -1,0 +1,347 @@
+{
+  "dataset_size": 1590,
+  "metadata_summary": {
+    "domains": {
+      "Information and Ideas": 478,
+      "Craft and Structure": 412,
+      "Standard English Conventions": 357,
+      "Expression of Ideas": 343
+    },
+    "skills": {
+      "Command of Evidence": 245,
+      "Words in Context": 226,
+      "Rhetorical Synthesis": 182,
+      "Boundaries": 180,
+      "Form, Structure, and Sense": 177,
+      "Transitions": 161,
+      "Text Structure and Purpose": 130,
+      "Inferences": 117,
+      "Central Ideas and Details": 116,
+      "Cross-Text Connections": 54,
+      "Cross-text Connections": 2
+    },
+    "difficulties": {
+      "Easy": 557,
+      "Medium": 534,
+      "Hard": 499
+    },
+    "sections": {
+      "Reading and Writing": 1590
+    },
+    "answer_types": {
+      "multiple_choice": 1590
+    }
+  },
+  "length_summary": {
+    "prompt_chars": {
+      "count": 1590,
+      "min": 63.0,
+      "max": 2131.0,
+      "average": 472.02
+    },
+    "question_text_chars": {
+      "count": 1590,
+      "min": 34.0,
+      "max": 226.0,
+      "average": 90.09
+    },
+    "question_total_chars": {
+      "count": 1590,
+      "min": 154.0,
+      "max": 2212.0,
+      "average": 562.11
+    },
+    "explanation_chars": {
+      "count": 1590,
+      "min": 338.0,
+      "max": 5064.0,
+      "average": 1252.49
+    },
+    "answer_choice_count": {
+      "count": 1590,
+      "min": 4.0,
+      "max": 4.0,
+      "average": 4.0
+    },
+    "answer_choice_chars": {
+      "count": 6360,
+      "min": 2.0,
+      "max": 429.0,
+      "average": 67.54
+    },
+    "prompt_words": {
+      "count": 1590,
+      "min": 10.0,
+      "max": 377.0,
+      "average": 74.59
+    },
+    "question_words": {
+      "count": 1590,
+      "min": 7.0,
+      "max": 35.0,
+      "average": 14.67
+    }
+  },
+  "core_topics": {
+    "groups": [
+      {
+        "topic": "STEM Research and Methods",
+        "count": 667,
+        "ratio": 0.4195
+      },
+      {
+        "topic": "Literature and Arts",
+        "count": 339,
+        "ratio": 0.2132
+      },
+      {
+        "topic": "Animals and Ecology",
+        "count": 279,
+        "ratio": 0.1755
+      },
+      {
+        "topic": "Domain-Driven: Standard English Conventions",
+        "count": 177,
+        "ratio": 0.1113
+      },
+      {
+        "topic": "Social Science and Behavior",
+        "count": 142,
+        "ratio": 0.0893
+      },
+      {
+        "topic": "Domain-Driven: Craft and Structure",
+        "count": 127,
+        "ratio": 0.0799
+      },
+      {
+        "topic": "Archaeology and Ancient History",
+        "count": 118,
+        "ratio": 0.0742
+      },
+      {
+        "topic": "Domain-Driven: Expression of Ideas",
+        "count": 87,
+        "ratio": 0.0547
+      },
+      {
+        "topic": "Domain-Driven: Information and Ideas",
+        "count": 72,
+        "ratio": 0.0453
+      },
+      {
+        "topic": "Economics and Policy",
+        "count": 57,
+        "ratio": 0.0358
+      }
+    ]
+  },
+  "question_skeleton_catalog": {
+    "observed": [
+      {
+        "key": "logical_completion",
+        "name": "Cause-and-Consequence Logical Completion",
+        "template": "A passage presents context and constraints, then leaves a blank. Select the choice that most logically completes the idea while preserving causal consistency.",
+        "count": 937,
+        "examples": [
+          "Which choice most logically completes the text?",
+          "Which choice most logically completes the text?",
+          "Which choice most logically completes the text?",
+          "Which choice most effectively uses data from the table to complete the statement?"
+        ]
+      },
+      {
+        "key": "general_reasoning",
+        "name": "General Textual Reasoning",
+        "template": "A passage includes claims and supporting details. Choose the answer that most logically aligns with the passage\u2019s reasoning.",
+        "count": 202,
+        "examples": [
+          "What does the text most strongly suggest about Sleep No More\u2019s use of its performance space?",
+          "It can most reasonably be inferred from the text that the finding about the microorganism community composition was important for which reas",
+          "Based on the text, what would have been the most likely consequence if New had not begun using sewing machines?",
+          "Based on the text, what challenge do humans sometimes experience?"
+        ]
+      },
+      {
+        "key": "methodology_interpretation",
+        "name": "Research Design and Interpretation",
+        "template": "A study setup and findings are described. Determine what methodological conclusion is justified by how variables and outcomes relate.",
+        "count": 120,
+        "examples": [
+          "What does the text indicate about the geological formation at Mistaken Point?",
+          "The text makes which point about the difference between the proportions of Quito residents and Lima residents using parks?",
+          "Which finding from the students\u2019 study, if true, would most strongly support Tannen\u2019s hypothesis?",
+          "Based on the text, which choice best describes the two previously unknown penguin species?"
+        ]
+      },
+      {
+        "key": "author_perspective",
+        "name": "Author or Historian Perspective",
+        "template": "A viewpoint is contrasted with alternatives. Identify the statement that best captures the author\u2019s or scholars\u2019 stance.",
+        "count": 63,
+        "examples": [
+          "Based on the text, what can be concluded about the diminishing popularity of the portrait miniature in the nineteenth century?",
+          "According to the text, how do historians view pachuca style?",
+          "According to the text, why are ecologists worried about Pando?",
+          "According to the text, what is true about Elinor?"
+        ]
+      },
+      {
+        "key": "data_completion",
+        "name": "Data-Driven Statement Completion",
+        "template": "A table or graph is provided with a partial statement. Use quantitative evidence to complete the statement with the most accurate comparison or value.",
+        "count": 57,
+        "examples": [
+          "Which choice best describes data from the graph that weaken the team\u2019s hypothesis?",
+          "Which choice best describes data from the graph that support Martinez and colleagues\u2019 conclusion?",
+          "Which choice best describes data from the table that support the team\u2019s conclusion?",
+          "Which choice best describes data from the graph that support the students\u2019 conclusion?"
+        ]
+      },
+      {
+        "key": "supports_claim",
+        "name": "Evidence That Supports a Claim",
+        "template": "A claim or hypothesis is provided. Identify the finding that, if true, would most directly strengthen that claim.",
+        "count": 56,
+        "examples": [
+          "Which finding, if true, would most directly support the researchers\u2019 hypothesis?",
+          "Which statement, if true, would most directly support the claim by Halliwell presented in the text?",
+          "Which finding from the study, if true, would most directly support the researchers\u2019 conclusion?",
+          "Which finding from the experiment, if true, would most directly support Garza and Robles\u2019s hypothesis?"
+        ]
+      },
+      {
+        "key": "main_idea",
+        "name": "Main Idea Synthesis",
+        "template": "A passage introduces several details and examples. Determine the claim that best synthesizes those details into a single central idea.",
+        "count": 51,
+        "examples": [
+          "Which choice best states the main idea of the text?",
+          "Which choice best states the main idea of the text?",
+          "Which choice best states the main idea of the text?",
+          "Which choice best states the main idea of the text?"
+        ]
+      },
+      {
+        "key": "comparative_reasoning",
+        "name": "Cross-Case Comparative Reasoning",
+        "template": "Two entities, periods, or datasets are compared. Determine which statement correctly characterizes their relationship.",
+        "count": 46,
+        "examples": [
+          "Which question does the text most directly attempt to answer?",
+          "Based on the text, how do people in the capital of Mexico most likely regard Dr. Malsufrido?",
+          "Which finding, if true, would most directly undermine Foster\u2019s hypothesis?",
+          "Based on the text, Huang, Seager, and colleagues would most likely agree with which statement about atmospheric NH3?"
+        ]
+      },
+      {
+        "key": "vocabulary_in_context",
+        "name": "Vocabulary-in-Context Precision",
+        "template": "A word or phrase appears in context. Select the meaning or replacement that best preserves the intended nuance.",
+        "count": 32,
+        "examples": [
+          "As used in the text, what does the word \u201cdisturbed\u201d most nearly mean?",
+          "As used in the text, what does the word \u201ccompleting\u201d most nearly mean?",
+          "As used in the text, what does the word \u201cspread\u201d most nearly mean?",
+          "As used in the text, what does the word \u201cbeckoning\u201d most nearly mean?"
+        ]
+      },
+      {
+        "key": "quotation_selection",
+        "name": "Quotation That Best Illustrates a Claim",
+        "template": "A claim about language or interpretation is given. Select the quotation that most directly exemplifies that claim.",
+        "count": 14,
+        "examples": [
+          "Which quotation from a researcher would best support the student\u2019s assertion?",
+          "Which quotation from a scholar describing Catlett\u2019s work would best support the student\u2019s claim?",
+          "Which quotation from a scholarly review of Braschi\u2019s work best supports the student\u2019s claim?",
+          "Which quotation from an article about Echelman\u2019s sculptures, if true, would most effectively illustrate the underlined claim?"
+        ]
+      },
+      {
+        "key": "weakens_claim",
+        "name": "Evidence That Weakens a Claim",
+        "template": "A researcher claim is presented. Choose the result that most directly weakens or challenges that claim.",
+        "count": 10,
+        "examples": [
+          "Which statement, if true, would most directly weaken the claim by Caron and colleagues about the fossils found in China and the United State",
+          "Which finding from the study, if true, would most directly weaken the potential explanation?",
+          "Which finding, if true, would most directly weaken the team\u2019s hypothesis?",
+          "Which finding, if true, would most directly weaken the student\u2019s conclusion?"
+        ]
+      },
+      {
+        "key": "best_inference",
+        "name": "Best-Supported Inference",
+        "template": "A text presents facts and constraints. Infer the conclusion that is best supported without introducing unsupported assumptions.",
+        "count": 2,
+        "examples": [
+          "Which statement about Alfagali and other Africanist scholars is best supported by information in the text?",
+          "Which statement about M. robustus and the Octopus Garden is best supported by the text?"
+        ]
+      }
+    ],
+    "library": [
+      {
+        "key": "logical_completion",
+        "name": "Cause-and-Consequence Logical Completion",
+        "template": "A passage presents context and constraints, then leaves a blank. Select the choice that most logically completes the idea while preserving causal consistency."
+      },
+      {
+        "key": "main_idea",
+        "name": "Main Idea Synthesis",
+        "template": "A passage introduces several details and examples. Determine the claim that best synthesizes those details into a single central idea."
+      },
+      {
+        "key": "supports_claim",
+        "name": "Evidence That Supports a Claim",
+        "template": "A claim or hypothesis is provided. Identify the finding that, if true, would most directly strengthen that claim."
+      },
+      {
+        "key": "weakens_claim",
+        "name": "Evidence That Weakens a Claim",
+        "template": "A researcher claim is presented. Choose the result that most directly weakens or challenges that claim."
+      },
+      {
+        "key": "data_completion",
+        "name": "Data-Driven Statement Completion",
+        "template": "A table or graph is provided with a partial statement. Use quantitative evidence to complete the statement with the most accurate comparison or value."
+      },
+      {
+        "key": "best_inference",
+        "name": "Best-Supported Inference",
+        "template": "A text presents facts and constraints. Infer the conclusion that is best supported without introducing unsupported assumptions."
+      },
+      {
+        "key": "methodology_interpretation",
+        "name": "Research Design and Interpretation",
+        "template": "A study setup and findings are described. Determine what methodological conclusion is justified by how variables and outcomes relate."
+      },
+      {
+        "key": "author_perspective",
+        "name": "Author or Historian Perspective",
+        "template": "A viewpoint is contrasted with alternatives. Identify the statement that best captures the author\u2019s or scholars\u2019 stance."
+      },
+      {
+        "key": "quotation_selection",
+        "name": "Quotation That Best Illustrates a Claim",
+        "template": "A claim about language or interpretation is given. Select the quotation that most directly exemplifies that claim."
+      },
+      {
+        "key": "comparative_reasoning",
+        "name": "Cross-Case Comparative Reasoning",
+        "template": "Two entities, periods, or datasets are compared. Determine which statement correctly characterizes their relationship."
+      },
+      {
+        "key": "vocabulary_in_context",
+        "name": "Vocabulary-in-Context Precision",
+        "template": "A word or phrase appears in context. Select the meaning or replacement that best preserves the intended nuance."
+      },
+      {
+        "key": "general_reasoning",
+        "name": "General Textual Reasoning",
+        "template": "A passage includes claims and supporting details. Choose the answer that most logically aligns with the passage\u2019s reasoning."
+      }
+    ]
+  }
+}
